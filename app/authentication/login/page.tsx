@@ -12,38 +12,22 @@ import useAuthStore from "@/store/formStore";
 import { useToast } from "@/components/ui/use-toast";
 
 function LoginPage() {
-  const { email, password, setField, isLoading, setLoading } = useAuthStore();
+  const { email, password, login, isLoading } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
 
-  const {toast} = useToast();
+  const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    const payload = {
-      email,
-      password,
-    };
-
-    // Perform form validation here
-
+    if (!email || !password) {
+      toast({
+        variant: "destructive",
+        description: "Please fill in all fields.",
+      });
+      return;
+    }
     try {
-      const response = await fetch(
-        "https://Entrypalbackend.onrender.com/api/goer/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json();
+      await login(email, password);
       toast({
         description: "User logged in successfully.",
       });
@@ -51,10 +35,8 @@ function LoginPage() {
       toast({
         variant: "destructive",
         description: `${error.message}`,
-      })
-      ;
+      });
     }
-    setLoading(false);
   };
 
   return (
@@ -84,7 +66,7 @@ function LoginPage() {
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setField("email", e.target.value)}
+                onChange={(e) => useAuthStore.setState({ email: e.target.value })}
                 className="w-full focus:outline-none border border-solid border-[#D0D5DD] h-[36px] mt-2 rounded-[6px] px-[12px] py-[8px]"
               />
             </div>
@@ -94,7 +76,7 @@ function LoginPage() {
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
-                onChange={(e) => setField("password", e.target.value)}
+                onChange={(e) => useAuthStore.setState({ password: e.target.value })}
                 className="w-full focus:outline-none border border-solid border-[#D0D5DD] h-[36px] mt-2 rounded-[6px] px-[12px] py-[8px]"
               />
               <span
