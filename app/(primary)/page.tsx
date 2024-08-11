@@ -5,7 +5,7 @@ import MobileSwiper from "./_components/MobileSwiper";
 export default function Home() {
   return (
     <>
-      <div className="w-full mt-[121px] relative h-[600px]">
+      <div className="w-full mt-[121px] relative">
         <div className="md:text-center  text-left px-8 md:px-0">
           <div className="font-aeonik 2xl:px-[23.5rem] md:px-[6rem] xl:px-[13rem]">
             <h1 className="font-semibold text-[34px] md:text-[44px] lg:text-[74px] md:leading-[49.685px] leading-[39.685px] lg:leading-[79.685px]">
@@ -34,12 +34,9 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-col">
-        <div className=" z-10 absolute -mt-[11rem] px-2 right-0 left-0">
-          <div className="2xl:w-[1457px] xl:w-[1257px] w-auto z-0 hover:shadow-md mx-auto flex justify-center flex-col  rounded-[8px] h-[364px] text-center bg-light">
+        <div className="px-[11px]  xl:px-[86px] right-0 left-0">
+          <div className="2xl:max-w-[1457px] xl:max-w-[1257px] w-auto hover:shadow-md flex justify-center flex-col rounded-[8px] xl:py-[38px] pt-[64.53px] xl:pt-0 text-center bg-light">
             <div className="px-[56.46px]">
-              <p className="font-gtwalsheimpro text-[#565F70] text-[10.7555px] leading-normal font-normal md:text-[12px] tracking-[3px] ">
-                DISCOVER EVENTS
-              </p>
               <h1 className="font-aeonik font-semibold text-[25px] lg:text-[37.642px] md:text-[42px]">
                 Where do you wanna go to today?
               </h1>
@@ -100,7 +97,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex md:gap-[8px]   w-auto md:mt-12 mt-8 2xl:w-[1384px] xl:w-[1238px] md:py-[10px] py-[8.692px] px-[10.755px] text-[10px] justify-center items-center md:px-[20px] mx-auto border border-solid border-[#F3F3F4] rounded-[12px] 2xl:text-[15px]">
+            <div className="flex md:gap-[8px] w-full md:mt-12 mt-8 2xl:max-w-[1384px] xl:max-w-[1238px] md:py-[10px] py-[8.692px]  text-[10px] justify-center items-center  mx-auto border border-solid border-[#F3F3F4] rounded-[12px] 2xl:text-[15px]">
               <div className="md:px-[16px] px-[12.34px] py-[8.066px] md:py-[9px] rounded-[5px] bg-[#F5FAFF]">
                 <p className="text-[#437EF7] font-inter">Trending</p>
               </div>
