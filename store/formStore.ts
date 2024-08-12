@@ -32,6 +32,7 @@ interface AuthState {
   ) => Promise<void>;
   verifyOtp: (otp: string) => Promise<void>;
   logout: () => void;
+  initialize: () => void;
 }
 
 const useAuthStore = create<AuthState>()(
@@ -65,7 +66,7 @@ const useAuthStore = create<AuthState>()(
               state.error = null;
               state.isLoading = false;
               state.user = response.data;
-              state.userId = response.data.userId; // Adjust according to your API response
+              state.userId = response.data.userId; 
             });
             localStorage.setItem("user", JSON.stringify(response.data));
           } else {
@@ -111,9 +112,9 @@ const useAuthStore = create<AuthState>()(
               state.user = response.data;
               state.isLoading = false;
               state.error = null;
-              state.userId = response.data.User.id; // Adjust according to your API response
+              state.userId = response.data.User.id; 
             });
-            localStorage.setItem("user", JSON.stringify(response.data));
+            localStorage.setItem("user", JSON.stringify(response.data.User));
           } else {
             set((state) => {
               state.error = "Signup failed";
@@ -163,6 +164,18 @@ const useAuthStore = create<AuthState>()(
         });
         localStorage.removeItem("user");
       },
+      initialize: () => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+          const user = JSON.parse(storedUser);
+          set((state) => {
+            state.isLoggedIn = true;
+            state.user = user;
+            state.userId = user.userId; 
+          });
+        }
+      },
+
     }))
   )
 );

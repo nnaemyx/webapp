@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image";
 import Background from "/public/assests/Background Image.png";
 import SearchIcon from "@/components/icons/SearchIcon";
@@ -13,8 +15,26 @@ import {
   slug,
   slugs,
 } from "@/components/data/items";
+import { useEffect } from "react";
+import useAuthStore from "@/store/formStore";
+import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 function Page() {
+  const { isLoggedIn, initialize } = useAuthStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+  useEffect(() => {
+    if (!isLoggedIn) {
+      toast({
+        description: "User created successfully, check your mail for OTP.",
+      });
+      router.push("/authentication/login");
+    }
+  }, [isLoggedIn]);
   return (
     <div className="mt-[99px]">
       <div className="relative">

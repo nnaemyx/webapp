@@ -1,14 +1,22 @@
-"use client"
+"use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Logo from "/public/assests/Logo.png";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Inter } from "next/font/google";
+import useAuthStore from "@/store/formStore";
 
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600"] });
+
 function Mobilenav() {
+  const { isLoggedIn, logout, initialize } = useAuthStore();
+
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -66,22 +74,72 @@ function Mobilenav() {
               ></path>
             </svg>
           </div>
-          <div className="grid grid-cols-2 gap-2  mt-4 mx-auto">
-            {menuItems.map((item) => (
-              <Link key={item.name} href={item.href}>
+          <div className="grid grid-cols-2 gap-2 mt-4 mx-auto">
+            {isLoggedIn ? (
+              <>
+                <Link href="/">
+                  <p
+                    className={`block py-2 px-2 text-[14px] text-left ${
+                      inter.className
+                    } ${
+                      pathname === "/"
+                        ? "text-[#78ABFF]"
+                        : "text-white"
+                    }`}
+                  >
+                    Discover
+                  </p>
+                </Link>
+                <Link href="/ticket">
+                  <p
+                    className={`block py-2 px-2 text-[14px] text-left ${
+                      inter.className
+                    } ${
+                      pathname === "/ticket"
+                        ? "text-[#78ABFF]"
+                        : "text-white"
+                    }`}
+                  >
+                    My Tickets
+                  </p>
+                </Link>
+                {/* <Link href="/dashboard">
+                  <p
+                    className={`block py-2 px-2 text-[14px] text-left ${
+                      inter.className
+                    } ${
+                      pathname === "/"
+                        ? "text-[#78ABFF]"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    My Account
+                  </p>
+                </Link> */}
                 <p
-                  className={`block py-2 px-2 text-[14px] text-left ${
-                    inter.className
-                  }  ${
-                    pathname === item.href
-                      ? "text-[#78ABFF]"
-                      : "text-white"
-                  }`}
+                  onClick={logout}
+                  className="block py-2 px-2 text-[14px] text-left text-[#FD3333] cursor-pointer"
                 >
-                  {item.name}
+                  Log Out
                 </p>
-              </Link>
-            ))}
+              </>
+            ) : (
+              <>
+                {menuItems.map((item) => (
+                  <Link key={item.name} href={item.href}>
+                    <p
+                      className={`block py-2 px-2 text-[14px] text-left ${
+                        inter.className
+                      } ${
+                        pathname === item.href ? "text-[#78ABFF]" : "text-white"
+                      }`}
+                    >
+                      {item.name}
+                    </p>
+                  </Link>
+                ))}
+              </>
+            )}
           </div>
         </div>
       )}

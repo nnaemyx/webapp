@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Signupimage from "/public/assests/signup image.png";
 import Stylizedlogo from "/public/assests/stylized logo.png";
 import GoogleIcon from "@/components/icons/GoogleIcon";
@@ -10,14 +10,19 @@ import EyeShowIcon from "@/components/icons/EyeShowIcon";
 import EyeHideIcon from "@/components/icons/EyeHideIcon";
 import useAuthStore from "@/store/formStore";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 function LoginPage() {
-  const { email, password, login, isLoading } = useAuthStore();
+  const { email, password, login, isLoading, setLoading, isLoggedIn } = useAuthStore();
+  const error = useAuthStore((state: any) => state.error);
   const [showPassword, setShowPassword] = useState(false);
+
+  const router = useRouter();
 
   const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
+    setLoading(true);
     e.preventDefault();
     if (!email || !password) {
       toast({
@@ -28,16 +33,33 @@ function LoginPage() {
     }
     try {
       await login(email, password);
-      toast({
-        description: "User logged in successfully.",
-      });
+  
     } catch (error: any) {
       toast({
         variant: "destructive",
         description: `${error.message}`,
       });
     }
+    setLoading(false);
   };
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        variant: "destructive",
+        description: `${error.message}`,
+      });
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      toast({
+        description: "User logged in successfully.",
+      });
+      router.push("/");
+    }
+  }, [isLoggedIn]);
 
   return (
     <div className="px-4 py-4">
