@@ -1,4 +1,8 @@
 import Image1 from "/public/assests/popular.png";
+import Rectangle1 from "/public/assests/Rectangle 3.png"
+import Rectangle2 from "/public/assests/Rectangle 3 (1).png"
+import Rectangle3 from "/public/assests/Rectangle 3 (2).png"
+
 
 import Rectangle from "/public/assests/Rectangle 12.png"
 export const items = [
@@ -71,3 +75,21 @@ export const partiesTemplate = {
   title: "Pleasing Fragrance: A Hills Music Concert",
 };
 export const slug = ["post-1", "post-2", "post-3"];
+
+export const newsData = [
+  {
+    imageSrc: Rectangle1,
+    title: "Entrypal app won the Cofluencia startup grants; to reimagine events for creators and their audience",
+    description: "Early-stage startups finally got the message that there was a tech downturn in the second half of 2022, acc.....",
+  },
+  {
+    imageSrc: Rectangle2,
+    title: "Finalist participant in the Anambra Start-up Pitch Competition.",
+    description: "Early-stage startups finally got the message that there was a tech downturn in the second half of 2022, acc.....",
+  },
+  {
+    imageSrc: Rectangle3,
+    title: "We opened our app to Beta-Testing",
+    description: "Early-stage startups finally got the message that there was a tech downturn in the second half of 2022, acc.....",
+  },
+];

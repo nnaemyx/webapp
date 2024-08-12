@@ -8,7 +8,7 @@ import TimeIcon from '@/components/icons/TimeIcon';
 import FreeIcon from '@/components/icons/FreeIcon';
 
 interface EventCardProps {
-  imageSrc: string| StaticImageData;
+  imageSrc: string | StaticImageData;
   eventInfo: string;
   isPromoted: boolean;
   time: string;

@@ -46,3 +46,22 @@
     font-family: "Inter";
     src: url("../fonts/Inter-Bold.ttf");
   }
+
+  html.w-mod-touch * {
+    background-attachment: scroll !important;
+  }
+  
+  /* Add this CSS to your styles */
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 12px; /* width of the scrollbar */
+  }
+  
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: #ffffff; /* color of the scrollbar thumb */
+    border-radius: 6px; /* rounded corners of the thumb */
+  }
+  
+  .overflow-y-auto::-webkit-scrollbar-track {
+    background-color: #778aa8; /* color of the scrollbar track */
+    border-radius: 16px;
+  }
