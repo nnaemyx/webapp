@@ -33,6 +33,8 @@ function Page() {
         description: "User created successfully, check your mail for OTP.",
       });
       router.push("/authentication/login");
+    } else {
+      router.push("/dashboard")
     }
   }, [isLoggedIn]);
   return (
