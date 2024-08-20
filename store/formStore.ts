@@ -18,6 +18,7 @@ interface AuthState {
   userId: string | null;
   user: any;  // Adjust this type according to your user object structure
   error: string | null;
+  success: string | null; // Add a success message
   setLoading: (loading: boolean) => void;
   login: (email: string, password: string) => Promise<void>;
   signup: (
@@ -52,6 +53,7 @@ const useAuthStore = create<AuthState>()(
       userId: null,
       user: null,
       error: null,
+      success: null, // Initialize success state
       setLoading: (loading: boolean) => set({ isLoading: loading }),
 
       login: async (email: string, password: string) => {
@@ -60,24 +62,20 @@ const useAuthStore = create<AuthState>()(
             "https://Entrypalbackend.onrender.com/api/goer/login",
             { email, password }
           );
-          if (response) {
-            set((state) => {
-              state.isLoggedIn = true;
-              state.error = null;
-              state.isLoading = false;
-              state.user = response.data;
-              state.userId = response.data.userId; 
-            });
-            localStorage.setItem("user", JSON.stringify(response.data));
-          } else {
-            set((state) => {
-              state.error = "Login failed";
-            });
-          }
+          set((state) => {
+            state.isLoggedIn = true;
+            state.error = null;
+            state.success = response.data.message || "Login successful!";
+            state.isLoading = false;
+            state.user = response.data;
+            state.userId = response.data.userId; 
+          });
+          localStorage.setItem("user", JSON.stringify(response.data));
         } catch (error: any) {
           set((state) => {
             state.isLoggedIn = false;
-            state.error = error.message || "An error occurred";
+            state.success = null;
+            state.error = error.response?.data.message || error.message || "An error occurred";
           });
         }
       },
@@ -106,24 +104,20 @@ const useAuthStore = create<AuthState>()(
               location,
             }
           );
-          if (response) {
-            set((state) => {
-              state.isLoggedIn = true;
-              state.user = response.data;
-              state.isLoading = false;
-              state.error = null;
-              state.userId = response.data.User.id; 
-            });
-            localStorage.setItem("user", JSON.stringify(response.data.User));
-          } else {
-            set((state) => {
-              state.error = "Signup failed";
-            });
-          }
+          set((state) => {
+            state.isLoggedIn = true;
+            state.user = response.data;
+            state.isLoading = false;
+            state.error = null;
+            state.success = response.data.message || "Signup successful!";
+            state.userId = response.data.User.id; 
+          });
+          localStorage.setItem("user", JSON.stringify(response.data.User));
         } catch (error: any) {
           set((state) => {
             state.isLoggedIn = false;
-            state.error = error.message || "An error occurred";
+            state.success = null;
+            state.error = error.response?.data.message || error.message || "An error occurred";
           });
         }
       },
@@ -137,20 +131,16 @@ const useAuthStore = create<AuthState>()(
               token: otp,
             }
           );
-          if (response) {
-            set((state) => {
-              state.isLoading = false;
-              state.isVerified = true;
-              state.error = null;
-            });
-          } else {
-            set((state) => {
-              state.error = "OTP verification failed";
-            });
-          }
+          set((state) => {
+            state.isLoading = false;
+            state.isVerified = true;
+            state.error = null;
+            state.success = response.data.message || "OTP verified successfully!";
+          });
         } catch (error: any) {
           set((state) => {
-            state.error = error.message || "An error occurred";
+            state.success = null;
+            state.error = error.response?.data.message || error.message || "An error occurred";
           });
         }
       },
@@ -164,6 +154,7 @@ const useAuthStore = create<AuthState>()(
         });
         localStorage.removeItem("user");
       },
+
       initialize: () => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
@@ -175,9 +166,9 @@ const useAuthStore = create<AuthState>()(
           });
         }
       },
-
     }))
   )
 );
+
 
 export default useAuthStore;

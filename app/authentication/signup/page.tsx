@@ -15,8 +15,7 @@ import { useRouter } from "next/navigation";
 function SignupPage() {
   const router = useRouter();
 
-  const { signup, setLoading, isLoading } = useAuthStore();
-  const error = useAuthStore((state: any) => state.error);
+  const { signup, setLoading, isLoading, error, success } = useAuthStore();
   const isLoggedIn = useAuthStore((state: any) => state.isLoggedIn);
 
   const [email, setEmail] = useState("");
@@ -33,14 +32,15 @@ function SignupPage() {
   const { toast } = useToast();
 
   const handleSignup = async (e: React.FormEvent) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
 
     if (!email || !fullname || !username || !password || !confirmPassword) {
       toast({
         variant: "destructive",
         description: "Please fill all fields",
       });
+      setLoading(false);
       return;
     }
 
@@ -49,6 +49,7 @@ function SignupPage() {
         variant: "destructive",
         description: "Passwords do not match!",
       });
+      setLoading(false);
       return;
     }
 
@@ -63,30 +64,27 @@ function SignupPage() {
         reference,
         location
       );
-
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        description: error.message || "Signup failed",
-      });
+    } catch (error) {
+      console.error("Signup error:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isLoggedIn && success) {
       toast({
-        description: "User created successfully, check your mail for OTP.",
+        description: success,
       });
       router.push("/authentication/otp");
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, success]);
 
   useEffect(() => {
     if (error) {
       toast({
         variant: "destructive",
-        description: `${error.message}`,
+        description: error,
       });
     }
   }, [error]);

@@ -23,7 +23,7 @@ function Page() {
   const { toast } = useToast();
   const isVerified = useAuthStore((state: any) => state.isVerified);
   const verifyOtp = useAuthStore((state: any) => state.verifyOtp);
-  const error = useAuthStore((state: any) => state.error);
+  const {error} = useAuthStore();
 
   useEffect(() => {
     const endTime = localStorage.getItem("otpEndTime");
@@ -55,7 +55,7 @@ function Page() {
     if (error) {
       toast({
         variant: "destructive",
-        description: `${error}`,
+        description: error,
       });
     }
   }, [error]);

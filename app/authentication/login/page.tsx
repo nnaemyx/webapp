@@ -13,13 +13,11 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
 function LoginPage() {
-  const { email, password, login, isLoading, setLoading, isLoggedIn, user } = useAuthStore();
-  const error = useAuthStore((state: any) => state.error);
+  const { email, password, login, isLoading, setLoading, isLoggedIn, error, success } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
-
-  const { toast } = useToast();
+  const {toast} = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
     setLoading(true);
@@ -29,28 +27,35 @@ function LoginPage() {
         variant: "destructive",
         description: "Please fill in all fields.",
       });
+      setLoading(false); 
       return;
     }
     try {
       await login(email, password);
-  
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        description: `${user.message}`,
-      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
     if (isLoggedIn) {
       toast({
-        description: `${user.message}`,
+        description: `${success}`, // Show success message
       });
       router.push("/dashboard");
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, success, router, toast]);
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        variant: "destructive",
+        description: `${error}`, // Show error message
+      });
+    }
+  }, [error, toast]);
 
   return (
     <div className="px-4 py-4">
@@ -79,7 +84,9 @@ function LoginPage() {
               <input
                 type="email"
                 value={email}
-                onChange={(e) => useAuthStore.setState({ email: e.target.value })}
+                onChange={(e) =>
+                  useAuthStore.setState({ email: e.target.value })
+                }
                 className="w-full focus:outline-none border border-solid border-[#D0D5DD] h-[36px] mt-2 rounded-[6px] px-[12px] py-[8px]"
               />
             </div>
@@ -89,7 +96,9 @@ function LoginPage() {
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
-                onChange={(e) => useAuthStore.setState({ password: e.target.value })}
+                onChange={(e) =>
+                  useAuthStore.setState({ password: e.target.value })
+                }
                 className="w-full focus:outline-none border border-solid border-[#D0D5DD] h-[36px] mt-2 rounded-[6px] px-[12px] py-[8px]"
               />
               <span
