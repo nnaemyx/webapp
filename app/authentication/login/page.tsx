@@ -48,7 +48,7 @@ function LoginPage() {
       toast({
         description: `${user.message}`,
       });
-      router.push("/");
+      router.push("/dashboard");
     }
   }, [isLoggedIn]);
 

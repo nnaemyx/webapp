@@ -30,7 +30,8 @@ function Page() {
   useEffect(() => {
     if (!isLoggedIn) {
       toast({
-        description: "User created successfully, check your mail for OTP.",
+        variant: "destructive",
+        description: "Please Login",
       });
       router.push("/authentication/login");
     } else {
