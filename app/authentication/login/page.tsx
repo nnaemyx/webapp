@@ -13,7 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
 function LoginPage() {
-  const { email, password, login, isLoading, setLoading, isLoggedIn } = useAuthStore();
+  const { email, password, login, isLoading, setLoading, isLoggedIn, user } = useAuthStore();
   const error = useAuthStore((state: any) => state.error);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -37,25 +37,16 @@ function LoginPage() {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        description: `${error.message}`,
+        description: `${user.message}`,
       });
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    if (error) {
-      toast({
-        variant: "destructive",
-        description: `${error.message}`,
-      });
-    }
-  }, [error]);
-
-  useEffect(() => {
     if (isLoggedIn) {
       toast({
-        description: "User logged in successfully.",
+        description: `${user.message}`,
       });
       router.push("/");
     }
