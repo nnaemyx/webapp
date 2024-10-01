@@ -3,7 +3,7 @@ import useAuthStore from "@/store/formStore";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "/public/assests/Logo.png";
-import { useEffect } from "react";
+import React,{ useEffect } from "react";
 
 
 function Navbar() {

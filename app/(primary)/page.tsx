@@ -1,3 +1,5 @@
+import React from "react";
+
 import Link from "next/link";
 import SwiperCarousel from "./_components/SwiperCarousel";
 import MobileSwiper from "./_components/MobileSwiper";
