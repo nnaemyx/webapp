@@ -3,12 +3,14 @@
 import React from 'react'
 import Welcome from './_components/Welcome'
 import ContactDetails from './_components/ContactDetails'
+import BankingDetails from './_components/BankingInfo'
 const page = () => {
   return (
     <div>
         {/* <div>page</div> */}
         {/* <Welcome/> */}
-        <ContactDetails/>
+        {/* <ContactDetails/> */}
+        <BankingDetails/>
     </div>
   )
 }

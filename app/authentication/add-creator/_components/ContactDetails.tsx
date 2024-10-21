@@ -1,19 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Signupimage from "/public/assests/signup image.png";
 import Stylizedlogo from "/public/assests/stylized logo.png";
-import GoogleIcon from "@/components/icons/GoogleIcon";
 import EyeShowIcon from "@/components/icons/EyeShowIcon";
 import EyeHideIcon from "@/components/icons/EyeHideIcon";
-import useAuthStore from "@/store/formStore";
-import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
-
-function SignupPage() {
-  const router = useRouter();
+import sideImage from "/public/assests/signup image.png"
+function ContactDetails() {
   const [email, setEmail] = useState("");
   const [firstname, setFirstname] = useState("");
   const [SurName, setSurName] = useState("");
@@ -23,7 +17,6 @@ function SignupPage() {
   const [preferredName, setPreferredName] = useState("");
   const [address, setAddress] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
    const details = [
     {type: "text", name: "First name", placeholder: "Chijioke", value: firstname, edit: (value: string)=>{setFirstname(value)}},
@@ -31,30 +24,29 @@ function SignupPage() {
     {type: 'email', name: "Email Address", placeholder: "your email goes here", value: email, edit: (value: string)=>{setEmail(value)}},
     {type: 'tel', name: "Phone Number", placeholder: "To learn about your event quicker", value: phoneNumber, edit: (value: string)=>{setPhoneNumber(value)}},
     {type: "text", name: "Physical Address", placeholder: "Where you work your magic!", value: address, edit: (value: string)=>{setAddress(value)}}, 
-    {type: "text", name: "Preferred Name", placeholder: "Would appear as ticket issuer", value: preferredName, edit: (value: string)=>{setPreferredName(value)}},
     {type: showPassword ? 'text' : "password" , name: "Password", placeholder: "*******", value: password, edit: (value: string)=>{setPassword(value)}},
     {type: showPassword ? 'text' : "password", name: "Confirm Password", placeholder: "*******", value: confirmPassword, edit: (value: string)=>{setConfirmPassword(value)}},
+    {type: "text", name: "Preferred Name", placeholder: "Would appear as ticket issuer", value: preferredName, edit: (value: string)=>{setPreferredName(value)}},
 ]
-  
   return (
-    <div className="px-4 py-4 font-inter">
-      <div className="md:flex justify-center  mx-auto">
-        <div className="lg:flex-1 lg:px-[10rem]">
+    <div className="flex px-4 py-4 font-inter">
+      <div className="md:flex md:w-[65%] w-[100%]">
+        <div className="lg:flex-1 lg:px-[8rem]">
           <div>
             <Image src={Stylizedlogo} alt="logo" className="-ml-8" />
           </div>
           <div>
-            <h1 className="text-[24px] font-semibold text-primary">
+            <h1 className="text-[24px] font-semibold text-success400">
               02 - Contact Details
             </h1>
             <p className="text-[14px] text-[#645D5D]">
               Your event access experience is about to get fun!
             </p>
           </div>
-          <form className="grid grid-cols-2 gap-4 ">
+          <form className="flex flex-wrap w-[100%] gap-4 ">
             {details.map(({name, value, type, placeholder, edit}, index)=>{
                 return (         
-          <div className=" my-3 relative" key={index}>
+          <div className={name != 'Email Address' && name != 'Preferred Name' ? "my-3 relative w-[47%]" : 'w-[100%] my-3 relative'} key={index}>
                 <label className="text-[14px]">{name}</label>
                 <input
                     type={type}
@@ -77,7 +69,7 @@ function SignupPage() {
           <div className="py-6 flex flex-col justify-center items-center gap-4">
           <button
               type="submit"
-              className="text-white bg-success400 w-[60%] py-[8px] px-[16px] rounded-[8px] font-sans font-medium"
+              className="text-white bg-success400 w-[80%] py-[8px] px-[16px] rounded-[8px] font-sans font-medium"
             >
              <p>Proceed</p>
             </button>
@@ -87,8 +79,9 @@ function SignupPage() {
           </div>
         </div>
       </div>
+      <Image src={sideImage} alt="Onboarding Image" className="hidden md:flex w-[35%] max-h-full "/>
     </div>
   );
 }
 
-export default SignupPage;
+export default ContactDetails;
