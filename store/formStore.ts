@@ -2,6 +2,8 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import axios from "axios";
+import { json } from "node:stream/consumers";
+import { callApi } from "@zayne-labs/callapi";
 
 interface AuthState {
   email: string;
@@ -31,9 +33,10 @@ interface AuthState {
     reference: string,
     location: string
   ) => Promise<void>;
-  verifyOtp: (otp: string) => Promise<void>;
+  verifyOtp: (token: string) => Promise<void>;
   logout: () => void;
   initialize: () => void;
+  getUser: () => void;
 }
 
 const useAuthStore = create<AuthState>()(
@@ -59,18 +62,17 @@ const useAuthStore = create<AuthState>()(
       login: async (email: string, password: string) => {
         try {
           const response = await axios.post(
-            "https://Entrypalbackend.onrender.com/api/goer/login",
+            process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? "/api/goer/login" : "https://Entrypalbackend.onrender.com/api/goer/login",
             { email, password }
           );
           set((state) => {
             state.isLoggedIn = true;
             state.error = null;
+            state.email = response.data.message.email
             state.success = response.data.message || "Login successful!";
             state.isLoading = false;
-            state.user = response.data;
             state.userId = response.data.userId; 
           });
-          localStorage.setItem("user", JSON.stringify(response.data));
         } catch (error: any) {
           set((state) => {
             state.isLoggedIn = false;
@@ -106,13 +108,13 @@ const useAuthStore = create<AuthState>()(
           );
           set((state) => {
             state.isLoggedIn = true;
-            state.user = response.data;
+            state.user = response.data.User;
             state.isLoading = false;
             state.error = null;
             state.success = response.data.message || "Signup successful!";
             state.userId = response.data.User.id; 
           });
-          localStorage.setItem("user", JSON.stringify(response.data.User));
+          localStorage.setItem('user',response.data.User.id)
         } catch (error: any) {
           set((state) => {
             state.isLoggedIn = false;
@@ -122,25 +124,27 @@ const useAuthStore = create<AuthState>()(
         }
       },
 
-      verifyOtp: async (otp: string) => {
+      verifyOtp: async (token: string) => {
         try {
-          const { userId } = useAuthStore.getState();
-          const response = await axios.post(
-            `https://Entrypalbackend.onrender.com/api/goer/verifyotp/${userId}`,
+          // const { userId } = useAuthStore.getState();
+          const id = JSON.parse(localStorage.getItem('user') || '{}')
+          const {data, error} = await callApi<{message: string}>(
+            process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? `/api/goer/verifyotp/${id.id}` : `https://Entrypalbackend.onrender.com/api/goer/verifyotp/${id.id}`,
             {
-              token: otp,
+              method: 'POST',
+              body: token
             }
           );
           set((state) => {
             state.isLoading = false;
-            state.isVerified = true;
             state.error = null;
-            state.success = response.data.message || "OTP verified successfully!";
+            state.success = data?.message || "OTP verified successfully!";
           });
+          localStorage.removeItem('user')
         } catch (error: any) {
           set((state) => {
             state.success = null;
-            state.error = error.response?.data.message || error.message || "An error occurred";
+            state.error =error?.message || "An error occurred";
           });
         }
       },
@@ -153,6 +157,10 @@ const useAuthStore = create<AuthState>()(
           state.userId = null;
         });
         localStorage.removeItem("user");
+      },
+      getUser: async () => {
+        const {data, error} = await callApi( process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? "/api/goer/user" : "https://Entrypalbackend.onrender.com/api/goer/user", { credentials: 'same-origin' });
+        console.log(data, error)
       },
 
       initialize: () => {
