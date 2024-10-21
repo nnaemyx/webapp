@@ -11,11 +11,11 @@ import useAuthStore from "@/store/formStore";
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600"] });
 
 function Mobilenav() {
-  const { isLoggedIn, logout, initialize } = useAuthStore();
+  const { isLoggedIn, logout } = useAuthStore();
 
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
+  // useEffect(() => {
+  //   initialize();
+  // }, [initialize]);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();

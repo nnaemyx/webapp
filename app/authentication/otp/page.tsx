@@ -29,17 +29,22 @@ function Page() {
 
   const handleSend = async (otp: string) => {
     await verifyOtp(otp);
-    if (error ) {
-      toast({
-        variant: "destructive",
-        description: error,
-      });
-    }if(success){
-      toast({
-        description: success,
-      });
-      route.push("/authentication/login")
-    }
+  }
+    useEffect(()=>{
+      if (error ) {
+        toast({
+          variant: "destructive",
+          description: error,
+        });
+        console.log(error)
+      }else if(success){
+        toast({
+          description: success,
+        });
+        console.log(success)
+        route.push("/authentication/login")
+      }
+    }, [error, success])
     
     /*
     setIsCounting(true)
@@ -60,7 +65,7 @@ function Page() {
     }, 1000);
     return () => clearInterval(timerInterval);      
     */
-  };  
+  
   return (
     <div className="relative px-4 py-4 font-inter">
       <div className="md:flex justify-center mx-auto">

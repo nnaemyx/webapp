@@ -23,7 +23,6 @@ import axios from "axios";
 import {callApi} from '@zayne-labs/callapi'
 
 function Page() {
-  const { isLoggedIn, initialize, user, email, getUser } = useAuthStore();
   const [person, setPerson] = useState({})
   const redirect = useRouter()
         

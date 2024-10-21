@@ -35,7 +35,7 @@ interface AuthState {
   ) => Promise<void>;
   verifyOtp: (token: string) => Promise<void>;
   logout: () => void;
-  initialize: () => void;
+  // initialize: () => void;
   getUser: () => void;
 }
 
@@ -62,7 +62,7 @@ const useAuthStore = create<AuthState>()(
       login: async (email: string, password: string) => {
         try {
           const response = await axios.post(
-            process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? "/api/goer/login" : "https://Entrypalbackend.onrender.com/api/goer/login",
+            process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? "/api/goer/login" : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/login`,
             { email, password }
           );
           set((state) => {
@@ -94,7 +94,7 @@ const useAuthStore = create<AuthState>()(
       ) => {
         try {
           const response = await axios.post(
-            "https://Entrypalbackend.onrender.com/api/goer/signup",
+            process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? "/api/goer/signup" : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/signup`,
             {
               email,
               password,
@@ -125,27 +125,29 @@ const useAuthStore = create<AuthState>()(
       },
 
       verifyOtp: async (token: string) => {
-        try {
-          // const { userId } = useAuthStore.getState();
-          const id = JSON.parse(localStorage.getItem('user') || '{}')
-          const {data, error} = await callApi<{message: string}>(
-            process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? `/api/goer/verifyotp/${id.id}` : `https://Entrypalbackend.onrender.com/api/goer/verifyotp/${id.id}`,
-            {
-              method: 'POST',
-              body: token
-            }
-          );
+        // const { userId } = useAuthStore.getState();
+        const id = localStorage.getItem('user') || '{}'
+        const {data, error} = await callApi<{message: string}>(
+          process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? `/api/goer/verifyotp/${id}` : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/verifyotp/${id}`,
+          {
+            method: 'POST',
+            body: {token}
+          }
+        );
+        if(error){
+          set((state) => {
+            state.success = null;
+            state.error =error?.message || "An error occurred";
+          });
+          console.log(data, error.message)
+        }else{
           set((state) => {
             state.isLoading = false;
             state.error = null;
             state.success = data?.message || "OTP verified successfully!";
           });
-          localStorage.removeItem('user')
-        } catch (error: any) {
-          set((state) => {
-            state.success = null;
-            state.error =error?.message || "An error occurred";
-          });
+          console.log(data, error, id, localStorage.getItem('user') )
+          // localStorage.removeItem('user')
         }
       },
 
@@ -159,21 +161,21 @@ const useAuthStore = create<AuthState>()(
         localStorage.removeItem("user");
       },
       getUser: async () => {
-        const {data, error} = await callApi( process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? "/api/goer/user" : "https://Entrypalbackend.onrender.com/api/goer/user", { credentials: 'same-origin' });
+        const {data, error} = await callApi(process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? "/api/goer/user" : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/user`, { credentials: 'same-origin' });
         console.log(data, error)
       },
 
-      initialize: () => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-          const user = JSON.parse(storedUser);
-          set((state) => {
-            state.isLoggedIn = true;
-            state.user = user;
-            state.userId = user.userId; 
-          });
-        }
-      },
+      // initialize: () => {
+      //   const storedUser = localStorage.getItem("user");
+      //   if (storedUser) {
+      //     const user = JSON.parse(storedUser);
+      //     set((state) => {
+      //       state.isLoggedIn = true;
+      //       state.user = user;
+      //       state.userId = user.userId; 
+      //     });
+      //   }
+      // },
     }))
   )
 );

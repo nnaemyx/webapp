@@ -7,11 +7,11 @@ import React,{ useEffect } from "react";
 
 
 function Navbar() {
-  const { isLoggedIn, logout, initialize } = useAuthStore();
+  const { isLoggedIn, logout} = useAuthStore();
 
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
+  // useEffect(() => {
+  //   initialize();
+  // }, [initialize]);
 
   return (
     <div className="hidden lg:block px-[4rem]">
