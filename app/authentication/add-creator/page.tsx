@@ -7,10 +7,9 @@ import BankingDetails from './_components/BankingInfo'
 const page = () => {
   return (
     <div>
-        {/* <div>page</div> */}
-        {/* <Welcome/> */}
+        <Welcome/>
         {/* <ContactDetails/> */}
-        <BankingDetails/>
+        {/* <BankingDetails/> */}
     </div>
   )
 }

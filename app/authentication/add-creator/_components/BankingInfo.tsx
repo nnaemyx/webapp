@@ -1,11 +1,16 @@
 "use client";
 
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Stylizedlogo from "/public/assests/stylized logo.png";
 import sideImage from "/public/assests/signup image.png"
 function BankingDetails() {
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   const [email, setBankName] = useState("");
   const [idType, setIdType] = useState("");
   const [idNumber, setIdNumber] = useState("");

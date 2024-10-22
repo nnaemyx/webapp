@@ -1,13 +1,19 @@
 "use client";
 
-import React, {useState } from "react";
+import React, {useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Stylizedlogo from "/public/assests/stylized logo.png";
 import EyeShowIcon from "@/components/icons/EyeShowIcon";
 import EyeHideIcon from "@/components/icons/EyeHideIcon";
 import sideImage from "/public/assests/signup image.png"
+import BankingDetails from "./BankingInfo";
 function ContactDetails() {
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   const [email, setEmail] = useState("");
   const [firstname, setFirstname] = useState("");
   const [SurName, setSurName] = useState("");
@@ -17,6 +23,11 @@ function ContactDetails() {
   const [preferredName, setPreferredName] = useState("");
   const [address, setAddress] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [page, setPage] = useState(2)
+
+  const nextpage = () =>{
+    setPage(3)
+  }
 
    const details = [
     {type: "text", name: "First name", placeholder: "Chijioke", value: firstname, edit: (value: string)=>{setFirstname(value)}},
@@ -28,7 +39,12 @@ function ContactDetails() {
     {type: showPassword ? 'text' : "password", name: "Confirm Password", placeholder: "*******", value: confirmPassword, edit: (value: string)=>{setConfirmPassword(value)}},
     {type: "text", name: "Preferred Name", placeholder: "Would appear as ticket issuer", value: preferredName, edit: (value: string)=>{setPreferredName(value)}},
 ]
+const data = {
+  firstname, SurName, password,confirmPassword, phoneNumber, preferredName, address, 
+}
   return (
+    <div>
+      {page === 2 ? 
     <div className="flex px-4 py-4 font-inter">
       <div className="md:flex md:w-[65%] w-[100%]">
         <div className="lg:flex-1 lg:px-[8rem]">
@@ -70,6 +86,7 @@ function ContactDetails() {
           <button
               type="submit"
               className="text-white bg-success400 w-[80%] py-[8px] px-[16px] rounded-[8px] font-sans font-medium"
+              onClick={nextpage}
             >
              <p>Proceed</p>
             </button>
@@ -80,6 +97,9 @@ function ContactDetails() {
         </div>
       </div>
       <Image src={sideImage} alt="Onboarding Image" className="hidden md:flex w-[35%] max-h-full "/>
+    </div> : <BankingDetails/>
+    }
+
     </div>
   );
 }
