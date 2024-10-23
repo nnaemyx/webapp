@@ -13,7 +13,7 @@ const Welcome = () => {
   }, [])
 
   const [typeChecked, setTypeChecked] = useState("")
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState("1")
   const accounts = [
     {type: "Individual", description: "A great pal who wants to host your parties on Entrypal", selected: false},
     {type: "Business Firm/Agency/Company", description: "An event place, record label, etc? Create events for a global audience on entrypal", selected: false}
@@ -24,12 +24,12 @@ const Welcome = () => {
   }
 
   const nextpage = () =>{
-    setPage(2)
+    setPage("2")
   }
   
   return (
     <div>
-      {page === 1 ? 
+      {page === "1"? 
   <div className='flex justify-center items-center flex-col text-center gap-5 w-[80%] m-auto '>
     <Image src={Stylizedlogo} alt="logo" />
     <div className=''>

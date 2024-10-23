@@ -8,6 +8,7 @@ import EyeShowIcon from "@/components/icons/EyeShowIcon";
 import EyeHideIcon from "@/components/icons/EyeHideIcon";
 import sideImage from "/public/assests/signup image.png"
 import BankingDetails from "./BankingInfo";
+import { Router } from "next/router";
 function ContactDetails() {
 
   useEffect(() => {
@@ -28,7 +29,7 @@ function ContactDetails() {
   const nextpage = () =>{
     setPage(3)
   }
-
+    const numbers = [1,2,3]
    const details = [
     {type: "text", name: "First name", placeholder: "Chijioke", value: firstname, edit: (value: string)=>{setFirstname(value)}},
     {type: "text", name: "Surname", placeholder: "Earnest", value: SurName, edit: (value: string)=>{setSurName(value)}},
@@ -43,10 +44,10 @@ const data = {
   firstname, SurName, password,confirmPassword, phoneNumber, preferredName, address, 
 }
   return (
-    <div>
+    <div >
       {page === 2 ? 
     <div className="flex px-4 py-4 font-inter">
-      <div className="md:flex md:w-[65%] w-[100%]">
+      <div className="md:flex md:w-[65%] w-[100%] relative bg-slate-600">
         <div className="lg:flex-1 lg:px-[8rem]">
           <div>
             <Image src={Stylizedlogo} alt="logo" className="-ml-8" />
@@ -95,6 +96,21 @@ const data = {
             <div className='text-grey400'>By continuing past this page, you acknowledge that you read, and agree to our <Link href='' className='underline text-grey700 '>Terms & Conditions for Eventcreators</Link> and our <Link href='' className='underline text-grey700'>Eventcreators Service Agreement</Link>.</div>
           </div>
         </div>
+      <div className="flex items-center absolute right-2 top-[100px]">
+      {numbers.map((number)=>{
+        return (
+          <div className="flex items-center">
+            <div onClick={nextpage} className={"cursor-pointer flex w-[35px] h-[35px] bg-success400 rounded-full justify-center items-center " + (number < page ? "bg-success400" : 'bg-grey400')}>
+              {number}
+            </div>
+            {number < 3 ?
+            <div className="flex w-[40px] h-[2px] bg-grey400 "></div>
+            : <></>
+          }
+          </div>
+        )
+      })}
+      </div>
       </div>
       <Image src={sideImage} alt="Onboarding Image" className="hidden md:flex w-[35%] max-h-full "/>
     </div> : <BankingDetails/>
