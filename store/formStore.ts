@@ -2,6 +2,8 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import axios from "axios";
+import { json } from "node:stream/consumers";
+import { callApi } from "@zayne-labs/callapi";
 
 interface AuthState {
   email: string;
@@ -31,9 +33,10 @@ interface AuthState {
     reference: string,
     location: string
   ) => Promise<void>;
-  verifyOtp: (otp: string) => Promise<void>;
+  verifyOtp: (token: string) => Promise<void>;
   logout: () => void;
-  initialize: () => void;
+  // initialize: () => void;
+  getUser: () => void;
 }
 
 const useAuthStore = create<AuthState>()(
@@ -59,18 +62,17 @@ const useAuthStore = create<AuthState>()(
       login: async (email: string, password: string) => {
         try {
           const response = await axios.post(
-            "https://Entrypalbackend.onrender.com/api/goer/login",
+            process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? "/api/goer/login" : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/login`,
             { email, password }
           );
           set((state) => {
             state.isLoggedIn = true;
             state.error = null;
+            state.email = response.data.message.email
             state.success = response.data.message || "Login successful!";
             state.isLoading = false;
-            state.user = response.data;
             state.userId = response.data.userId; 
           });
-          localStorage.setItem("user", JSON.stringify(response.data));
         } catch (error: any) {
           set((state) => {
             state.isLoggedIn = false;
@@ -92,7 +94,7 @@ const useAuthStore = create<AuthState>()(
       ) => {
         try {
           const response = await axios.post(
-            "https://Entrypalbackend.onrender.com/api/goer/signup",
+            process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? "/api/goer/signup" : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/signup`,
             {
               email,
               password,
@@ -106,13 +108,13 @@ const useAuthStore = create<AuthState>()(
           );
           set((state) => {
             state.isLoggedIn = true;
-            state.user = response.data;
+            state.user = response.data.User;
             state.isLoading = false;
             state.error = null;
             state.success = response.data.message || "Signup successful!";
             state.userId = response.data.User.id; 
           });
-          localStorage.setItem("user", JSON.stringify(response.data.User));
+          localStorage.setItem('user',response.data.User.id)
         } catch (error: any) {
           set((state) => {
             state.isLoggedIn = false;
@@ -122,26 +124,30 @@ const useAuthStore = create<AuthState>()(
         }
       },
 
-      verifyOtp: async (otp: string) => {
-        try {
-          const { userId } = useAuthStore.getState();
-          const response = await axios.post(
-            `https://Entrypalbackend.onrender.com/api/goer/verifyotp/${userId}`,
-            {
-              token: otp,
-            }
-          );
-          set((state) => {
-            state.isLoading = false;
-            state.isVerified = true;
-            state.error = null;
-            state.success = response.data.message || "OTP verified successfully!";
-          });
-        } catch (error: any) {
+      verifyOtp: async (token: string) => {
+        // const { userId } = useAuthStore.getState();
+        const id = localStorage.getItem('user') || '{}'
+        const {data, error} = await callApi<{message: string}>(
+          process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? `/api/goer/verifyotp/${id}` : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/verifyotp/${id}`,
+          {
+            method: 'POST',
+            body: {token}
+          }
+        );
+        if(error){
           set((state) => {
             state.success = null;
-            state.error = error.response?.data.message || error.message || "An error occurred";
+            state.error =error?.message || "An error occurred";
           });
+          console.log(data, error.message)
+        }else{
+          set((state) => {
+            state.isLoading = false;
+            state.error = null;
+            state.success = data?.message || "OTP verified successfully!";
+          });
+          console.log(data, error, id, localStorage.getItem('user') )
+          // localStorage.removeItem('user')
         }
       },
 
@@ -154,18 +160,22 @@ const useAuthStore = create<AuthState>()(
         });
         localStorage.removeItem("user");
       },
-
-      initialize: () => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-          const user = JSON.parse(storedUser);
-          set((state) => {
-            state.isLoggedIn = true;
-            state.user = user;
-            state.userId = user.userId; 
-          });
-        }
+      getUser: async () => {
+        const {data, error} = await callApi(process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? "/api/goer/user" : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/user`, { credentials: 'same-origin' });
+        console.log(data, error)
       },
+
+      // initialize: () => {
+      //   const storedUser = localStorage.getItem("user");
+      //   if (storedUser) {
+      //     const user = JSON.parse(storedUser);
+      //     set((state) => {
+      //       state.isLoggedIn = true;
+      //       state.user = user;
+      //       state.userId = user.userId; 
+      //     });
+      //   }
+      // },
     }))
   )
 );

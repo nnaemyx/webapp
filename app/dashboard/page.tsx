@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import Image from "next/image";
 import Background from "/public/assests/Background Image.png";
@@ -15,29 +15,40 @@ import {
   slug,
   slugs,
 } from "@/components/data/items";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useAuthStore from "@/store/formStore";
 import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
+import {useRouter } from "next/navigation";
+import axios from "axios";
+import {callApi} from '@zayne-labs/callapi'
 
 function Page() {
-  const { isLoggedIn, initialize } = useAuthStore();
-  const router = useRouter();
-
+  const [person, setPerson] = useState({})
+  const redirect = useRouter()
+        
   useEffect(() => {
-    initialize();
-  }, [initialize]);
-  useEffect(() => {
-    if (!isLoggedIn) {
-      toast({
-        variant: "destructive",
-        description: "Please Login",
-      });
-      router.push("/authentication/login");
-    } else {
-      router.push("/dashboard")
-    }
-  }, [isLoggedIn]);
+    const zustandUser = async ()=> {
+       const {data, error} = await callApi<{message: {
+        fullname: string,
+        username: string,
+        email: string,
+        phoneNumber: string
+       }}>( process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? '/api/goer/user' : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/user`, { credentials: 'include', dedupeStrategy: "none" });
+       console.log(data, error)
+       if(error){
+        toast({
+          variant: "destructive",
+          description: error?.message || "No access code",
+        });
+        useAuthStore.setState({isLoggedIn: false})
+        redirect.push("/authentication/login")
+       }else{
+         setPerson(data.message)
+         useAuthStore.setState({user : data.message})
+       }
+     }
+     zustandUser()
+  }, [])
   return (
     <div className="mt-[99px]">
       <div className="relative">

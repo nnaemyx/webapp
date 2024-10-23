@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import StylizedMessageIcon from "@/components/icons/StylizedMessageIcon";
 import Signupimage from "/public/assests/signup image.png";
 import Image from "next/image";
@@ -14,78 +15,57 @@ import { DialogDemo } from "@/components/popup/EventgoerOtp";
 import { useToast } from "@/components/ui/use-toast";
 import useAuthStore from "@/store/formStore";
 
+
 function Page() {
   const [otp, setOtp] = useState("");
   const [countdown, setCountdown] = useState(0);
   const [isCounting, setIsCounting] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
-
   const { toast } = useToast();
   const isVerified = useAuthStore((state: any) => state.isVerified);
   const verifyOtp = useAuthStore((state: any) => state.verifyOtp);
-  const {error} = useAuthStore();
+  const {error, success} = useAuthStore();
+  const route = useRouter()
 
-  useEffect(() => {
-    const endTime = localStorage.getItem("otpEndTime");
-    if (endTime) {
-      const remainingTime = Math.floor((Number(endTime) - Date.now()) / 1000);
-      if (remainingTime > 0) {
-        setCountdown(remainingTime);
-        setIsCounting(true);
+  const handleSend = async (otp: string) => {
+    await verifyOtp(otp);
+  }
+    useEffect(()=>{
+      if (error ) {
+        toast({
+          variant: "destructive",
+          description: error,
+        });
+        console.log(error)
+      }else if(success){
+        toast({
+          description: success,
+        });
+        console.log(success)
+        route.push("/authentication/login")
       }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isCounting && countdown > 0) {
-      const timer = setInterval(() => setCountdown(countdown - 1), 1000);
-      return () => clearInterval(timer);
-    } else if (countdown === 0) {
-      setIsCounting(false); // Stop the countdown
-    }
-  }, [countdown, isCounting]);
-
-  useEffect(() => {
-    if (otp.length === 4) {
-      handleVerifyOtp(otp);
-    }
-  }, [otp]);
-
-  useEffect(() => {
-    if (error) {
-      toast({
-        variant: "destructive",
-        description: error,
+    }, [error, success])
+    
+    /*
+    setIsCounting(true)
+    const initalTime = 180
+    setCountdown(initalTime)
+    const timerInterval = setInterval(() => {
+      setCountdown((prevTime) => {
+        if (prevTime === 0) {
+          clearInterval(timerInterval);
+          // Perform actions when the timer reaches zero
+          console.log('Countdown complete!');
+          setIsCounting(false)
+          return 0;
+        } else {
+          return prevTime - 1;
+        }
       });
-    }
-  }, [error]);
-
-  const handleResend = () => {
-    const endTime = Date.now() + 183 * 1000; // 3:03 minutes from now
-    localStorage.setItem("otpEndTime", endTime.toString());
-    setCountdown(183); // Reset countdown to 3:03 minutes
-    setIsCounting(true); // Restart the countdown
-  };
-
-  const handleVerifyOtp = async (otp: string) => {
-    const isVerified = await verifyOtp(otp);
-    if (isVerified) {
-      toast({
-        description: "User verified successfully",
-      });
-      setShowDialog(true); 
-    }
-  };
-
-  useEffect(() => {
-    if (isVerified) {
-      toast({
-        description: "User verified successfully",
-      });
-      setShowDialog(true); 
-    }
-  }, [isVerified]);
-
+    }, 1000);
+    return () => clearInterval(timerInterval);      
+    */
+  
   return (
     <div className="relative px-4 py-4 font-inter">
       <div className="md:flex justify-center mx-auto">
@@ -128,15 +108,15 @@ function Page() {
               </InputOTPGroup>
             </InputOTP>
             <button
-              disabled={isCounting && countdown > 0}
-              onClick={handleResend}
+              disabled= {isCounting && countdown > 0}
+              onClick={() => {void handleSend(otp)}}
               className={`px-[16px] py-[8px] ${
-                countdown === 0 ? "bg-[#1671D9]" : "bg-[#D0D5DD]"
+                countdown <= 0 ? "bg-[#1671D9]" : "bg-[#D0D5DD]"
               } font-semibold text-white rounded-[8px] max-w-[177px] w-full mt-[29.68px] text-[14px]`}
             >
               {isCounting && countdown > 0
-                ? `Resend in ${Math.floor(countdown / 60)}:${countdown % 60}`
-                : "Resend"}
+                ? `Resend in ${Math.floor((countdown % 3600) / 60) } : ${countdown % 60}`
+                : "Send"}
             </button>
             <div className="text-[#98A2B3] mt-[61px] text-[12px] font-medium">
               <p>Can't see the email? Please check the spam folder.</p>

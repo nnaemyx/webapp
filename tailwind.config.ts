@@ -47,7 +47,12 @@ const config = {
         dark: "#000",
         light: "#FFF",
         primary: "#072D6B", 
-        secondary: "#236DFF"
+        secondary: "#236DFF",
+        success300: "#40B869",
+        success400: "#0F973D",
+        success500: "#099137",
+        grey400: "#98A2B3",
+        grey700: "#344054"
       },
       fontFamily: {
         aeonik: ["Aeonik", 'sans-serif'],
