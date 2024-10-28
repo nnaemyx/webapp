@@ -27,27 +27,31 @@ function Page() {
   const redirect = useRouter()
         
   useEffect(() => {
-    const zustandUser = async ()=> {
-       const {data, error} = await callApi<{message: {
-        fullname: string,
-        username: string,
-        email: string,
-        phoneNumber: string
-       }}>( process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? '/api/goer/user' : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/user`, { credentials: 'include', dedupeStrategy: "none" });
-       console.log(data, error)
-       if(error){
-        toast({
-          variant: "destructive",
-          description: error?.message || "No access code",
-        });
-        useAuthStore.setState({isLoggedIn: false})
-        redirect.push("/authentication/login")
-       }else{
-         setPerson(data.message)
-         useAuthStore.setState({user : data.message})
+    if(useAuthStore.getState().isLoggedIn === false){
+      const accessToken = useAuthStore.getState().user?.accessToken
+      const zustandUser = async ()=> {
+         const {data, error} = await callApi<{message: {
+          fullname: string,
+          username: string,
+          email: string,
+          phoneNumber: string
+         }}>( process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? '/api/goer/user' : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/user`, { credentials: 'include', dedupeStrategy: "none", auth: accessToken ? accessToken : " " });
+         if(error){
+          toast({
+            variant: "destructive",
+            description: error?.message || "No access code",
+          });
+          useAuthStore.setState({isLoggedIn: false})
+          redirect.push("/authentication/login")
+         }else{
+           setPerson(data.message)
+           useAuthStore.setState({user : data.message, isLoggedIn: true})
+         }
        }
-     }
-     zustandUser()
+       zustandUser()
+    }else{
+      setPerson(useAuthStore.getState().user)
+    }
   }, [])
   return (
     <div className="mt-[99px]">

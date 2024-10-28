@@ -137,7 +137,7 @@ function LoginPage() {
               </Link>
             </p>
             <Link
-              href="https://entrypalbackend.onrender.com/auth/google"
+              href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google`}
               className="rounded-[20px] border-solid border-[2px] border-[#DADCE0] bg-light h-[40px] lg:w-[400px] flex px-6 text-center items-center mx-auto mt-8"
             >
               <GoogleIcon />

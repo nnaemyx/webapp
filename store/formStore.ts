@@ -72,6 +72,7 @@ const useAuthStore = create<AuthState>()(
             state.success = response.data.message || "Login successful!";
             state.isLoading = false;
             state.userId = response.data.userId; 
+            state.user = response.data
           });
         } catch (error: any) {
           set((state) => {
