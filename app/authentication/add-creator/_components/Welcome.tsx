@@ -5,9 +5,10 @@ import Image from 'next/image'
 import Stylizedlogo from "/public/assests/stylized logo.png";
 import Link from 'next/link';
 import ContactDetails from './ContactDetails';
+import { useRouter } from "next/navigation";
 
 const Welcome = () => {
-
+const router = useRouter()
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -24,7 +25,7 @@ const Welcome = () => {
   }
 
   const nextpage = () =>{
-    setPage("2")
+    router.push('/authentication/add-creator/contact')
   }
   
   return (
@@ -40,11 +41,11 @@ const Welcome = () => {
     <div className='flex h-[300px] gap-4 justify-center text-left'>
       {accounts.map(({type, description})=>{
         return (
-          <div className='bg-gray-100 w-[45%] h-[100%] rounded-lg p-5'>
+          <div className='bg-gray-100 w-[45%] h-[100%] rounded-lg p-3'>
             <div className='h-[65%] w-full '>
               <input checked={typeChecked === type ? true : false } onChange={e => handleChange(e)} className='accent-success400' type="checkbox" name={type} id="" value={type} />
             </div>
-            <div className='h-[35%]'>
+            <div className='md:h-[35%] h-[40%]'>
             <div className='text-success400'>{type}</div>
             <div className='text-[12px]'>{description}</div>
             </div>

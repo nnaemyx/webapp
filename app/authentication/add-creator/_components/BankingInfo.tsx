@@ -16,44 +16,22 @@ function BankingDetails() {
   const [idNumber, setIdNumber] = useState("");
   const [phoneNumber, setAccountNumber] = useState("");
   const [address, setAccountName] = useState("");
-
-   const details = [
-    {type: "text", name: "ID Type", placeholder: "Voters Card", value: idType, edit: (value: string)=>{setIdType(value)}},
-    {type: "text", name: "ID Number", placeholder: "0123456789", value: idNumber, edit: (value: string)=>{setIdNumber(value)}},
-    {type: 'email', name: "Bank Name", placeholder: "FirstBank Plc", value: email, edit: (value: string)=>{setBankName(value)}},
-    {type: 'tel', name: "Account Number", placeholder: "0123456789", value: phoneNumber, edit: (value: string)=>{setAccountNumber(value)}},
-    {type: "text", name: "Account Name", placeholder: "Chijioke", value: address, edit: (value: string)=>{setAccountName(value)}}
-]
+  const numbers = [1,2,3]
+  const page = 3
  
-    const banks = [
-        { "id": "1", "name": "Access Bank" ,"code":"044" },
-        { "id": "2", "name": "Citibank","code":"023" },
-        { "id": "3", "name": "Diamond Bank","code":"063" },
-        { "id": "4", "name": "Dynamic Standard Bank","code":"" },
-        { "id": "5", "name": "Ecobank Nigeria","code":"050" },
-        { "id": "6", "name": "Fidelity Bank Nigeria","code":"070" },
-        { "id": "7", "name": "First Bank of Nigeria","code":"011" },
-        { "id": "8", "name": "First City Monument Bank","code":"214" },
-        { "id": "9", "name": "Guaranty Trust Bank","code":"058" },
-        { "id": "10", "name": "Heritage Bank Plc","code":"030" },
-        { "id": "11", "name": "Jaiz Bank","code":"301" },
-        { "id": "12", "name": "Keystone Bank Limited","code":"082" },
-        { "id": "13", "name": "Providus Bank Plc","code":"101" },
-        { "id": "14", "name": "Polaris Bank","code":"076" },
-        { "id": "15", "name": "Stanbic IBTC Bank Nigeria Limited","code":"221" },
-        { "id": "16", "name": "Standard Chartered Bank","code":"068" },
-        { "id": "17", "name": "Sterling Bank","code":"232" },
-        { "id": "18", "name": "Suntrust Bank Nigeria Limited","code":"100" },
-        { "id": "19", "name": "Union Bank of Nigeria","code":"032" },
-        { "id": "20", "name": "United Bank for Africa","code":"033" },
-        { "id": "21", "name": "Unity Bank Plc","code":"215" },
-        { "id": "22", "name": "Wema Bank","code":"035" },
-        { "id": "23", "name": "Zenith Bank","code":"057" }
-    ]
+    const banks = ["Access Bank" ,"Citibank","Diamond Bank","Dynamic Standard Bank","Ecobank Nigeria","Fidelity Bank Nigeria","First Bank of Nigeria","First City Monument Bank","Guaranty Trust Bank","Heritage Bank Plc","Jaiz Bank","Keystone Bank Limited","Providus Bank Plc","Polaris Bank","Stanbic IBTC Bank Nigeria Limited","Standard Chartered Bank","Sterling Bank","Suntrust Bank Nigeria Limited","Union Bank of Nigeria","United Bank for Africa","Unity Bank Plc","Wema Bank","Zenith Bank"]
+    const ids = ["Voters card", "NIN", "Drivers Licence", "International Passport"]
+    const details = [
+      {options: ids, type: "text", name: "ID Type", placeholder: "Voters Card", value: idType, edit: (value: string)=>{setIdType(value)}},
+      {type: "text", name: "ID Number", placeholder: "0123456789", value: idNumber, edit: (value: string)=>{setIdNumber(value)}},
+      {options: banks, type: 'text', name: "Bank Name", placeholder: "FirstBank Plc", value: email, edit: (value: string)=>{setBankName(value)}},
+      {type: 'tel', name: "Account Number", placeholder: "0123456789", value: phoneNumber, edit: (value: string)=>{setAccountNumber(value)}},
+      {type: "text", name: "Account Name", placeholder: "Chijioke", value: address, edit: (value: string)=>{setAccountName(value)}}
+  ]
   return (
     <div className="flex px-4 py-4 font-inter">
-      <div className="md:flex md:w-[65%] w-[100%]">
-        <div className="lg:flex-1 lg:px-[8rem]">
+      <div className="md:flex md:w-[65%] w-[100%] relative">
+        <div className="lg:flex-1 lg:px-[8rem] ">
           <div>
             <Image src={Stylizedlogo} alt="logo" className="-ml-8" />
           </div>
@@ -66,16 +44,15 @@ function BankingDetails() {
             </p>
           </div>
           <form className="flex flex-wrap w-[100%] gap-4 ">
-            {details.map(({name, value, type, placeholder, edit}, index)=>{
+            {details.map(({ options, name, value, type, placeholder, edit}, index)=>{
                 return (    
-                    
-                    name === "Bank Name" ?
+                    options ?
                     <div>
                          <label className="text-[14px]">{name}</label>
                         <select name="" id="" className="w-full border border-solid border-[#D0D5DD] h-[36px] mt-2 rounded-[6px] px-[12px] py-[8px]">
-                    {banks.map(({name}, index)=>{
+                    {options?.map((option)=>{
                         return (
-                            <option value={name}>{name}</option>
+                            <option value={option}>{option}</option>
                         )
                     })}
                   </select>
@@ -107,6 +84,21 @@ function BankingDetails() {
             <div className='text-grey400'>By continuing past this page, you acknowledge that you read, and agree to our <Link href='' className='underline text-grey700 '>Terms & Conditions for Eventcreators</Link> and our <Link href='' className='underline text-grey700'>Eventcreators Service Agreement</Link>.</div>
           </div>
         </div>
+        <div className="flex items-center absolute right-2 top-[100px]">
+      {numbers.map((number)=>{
+        return (
+          <div className="flex items-center">
+            <div className={"flex w-[35px] h-[35px] rounded-full justify-center items-center " + (number < page ? "bg-success400" : 'bg-grey400')}>
+              {number}
+            </div>
+            {number < 3 ?
+            <div className="flex w-[40px] h-[2px] bg-grey400 "></div>
+            : <></>
+          }
+          </div>
+        )
+      })}
+      </div>
       </div>
      
       <Image src={sideImage} alt="Onboarding Image" className="hidden md:flex w-[35%] max-h-full "/>

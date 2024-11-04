@@ -8,8 +8,10 @@ import EyeShowIcon from "@/components/icons/EyeShowIcon";
 import EyeHideIcon from "@/components/icons/EyeHideIcon";
 import sideImage from "/public/assests/signup image.png"
 import BankingDetails from "./BankingInfo";
-import { Router } from "next/router";
+import { useRouter } from "next/navigation";
+
 function ContactDetails() {
+const router = useRouter()
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -27,7 +29,7 @@ function ContactDetails() {
   const [page, setPage] = useState(2)
 
   const nextpage = () =>{
-    setPage(3)
+    router.push("/authentication/add-creator/banking")
   }
     const numbers = [1,2,3]
    const details = [
@@ -47,7 +49,7 @@ const data = {
     <div >
       {page === 2 ? 
     <div className="flex px-4 py-4 font-inter">
-      <div className="md:flex md:w-[65%] w-[100%] relative bg-slate-600">
+      <div className="md:flex md:w-[65%] w-[100%] relative">
         <div className="lg:flex-1 lg:px-[8rem]">
           <div>
             <Image src={Stylizedlogo} alt="logo" className="-ml-8" />
@@ -100,7 +102,7 @@ const data = {
       {numbers.map((number)=>{
         return (
           <div className="flex items-center">
-            <div onClick={nextpage} className={"cursor-pointer flex w-[35px] h-[35px] bg-success400 rounded-full justify-center items-center " + (number < page ? "bg-success400" : 'bg-grey400')}>
+            <div onClick={nextpage} className={"flex w-[35px] h-[35px]  rounded-full justify-center items-center " + (number < page ? "bg-success400" : 'bg-grey400')}>
               {number}
             </div>
             {number < 3 ?

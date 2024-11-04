@@ -5,6 +5,7 @@ import axios from "axios";
 import { json } from "node:stream/consumers";
 import { callApi } from "@zayne-labs/callapi";
 
+axios.defaults.withCredentials = true
 interface AuthState {
   email: string;
   password: string;
