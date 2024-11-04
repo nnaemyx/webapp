@@ -109,7 +109,7 @@ function LoginPage() {
               </span>
               <Link
                 className="underline text-[#667185] text-[14px] flex justify-end mt-2"
-                href="/authentication/forgotpassword"
+                href="/authentication/forgot-password"
               >
                 Forgot password
               </Link>
