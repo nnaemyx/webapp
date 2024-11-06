@@ -153,7 +153,7 @@ function Page() {
         </div>
       </div>
     </div>
-    <div className="lg:px-[4rem] px-[2rem] mt-[8rem]">
+    {/* <div className="lg:px-[4rem] px-[2rem] mt-[8rem]">
       <div className="flex xl:flex-row flex-col justify-between">
         <div>
           <div className="flex flex-col ">
@@ -196,7 +196,7 @@ function Page() {
           </div>
         </div>
       </div>
-    </div>
+    </div> */}
     <div>
     </div>
     <div>
