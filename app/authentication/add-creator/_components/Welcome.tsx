@@ -46,7 +46,7 @@ const router = useRouter()
               <input checked={typeChecked === type ? true : false } onChange={e => handleChange(e)} className='accent-success400' type="checkbox" name={type} id="" value={type} />
             </div>
             <div className='md:h-[35%] h-[40%]'>
-            <div className='text-success400'>{type}</div>
+            <div className={ typeChecked === type ?'text-success400' : ""}>{type}</div>
             <div className='text-[12px]'>{description}</div>
             </div>
           </div>

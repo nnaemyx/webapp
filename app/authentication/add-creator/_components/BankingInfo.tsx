@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import Stylizedlogo from "/public/assests/stylized logo.png";
 import sideImage from "/public/assests/signup image.png"
+import { DialogDemo } from "@/components/popup/EventgoerOtp";
+
 function BankingDetails() {
 
   useEffect(() => {
@@ -16,10 +18,10 @@ function BankingDetails() {
   const [idNumber, setIdNumber] = useState("");
   const [phoneNumber, setAccountNumber] = useState("");
   const [address, setAccountName] = useState("");
+  const [showDialog, setShowDialog] = useState(false);
   const numbers = [1,2,3]
-  const page = 3
  
-    const banks = ["Access Bank" ,"Citibank","Diamond Bank","Dynamic Standard Bank","Ecobank Nigeria","Fidelity Bank Nigeria","First Bank of Nigeria","First City Monument Bank","Guaranty Trust Bank","Heritage Bank Plc","Jaiz Bank","Keystone Bank Limited","Providus Bank Plc","Polaris Bank","Stanbic IBTC Bank Nigeria Limited","Standard Chartered Bank","Sterling Bank","Suntrust Bank Nigeria Limited","Union Bank of Nigeria","United Bank for Africa","Unity Bank Plc","Wema Bank","Zenith Bank"]
+    const banks = ["Access Bank" ,"Citibank","Diamond Bank","Dynamic Standard Bank","Ecobank Nigeria","Fidelity Bank Nigeria","First Bank of Nigeria","First City Monument Bank","Guaranty Trust Bank","Heritage Bank Plc","Jaiz Bank","Keystone Bank Limited","Providus Bank Plc","Polaris Bank", "Opay","Palmpay", "Stanbic IBTC Bank Nigeria Limited","Standard Chartered Bank","Sterling Bank","Suntrust Bank Nigeria Limited","Union Bank of Nigeria","United Bank for Africa","Unity Bank Plc","Wema Bank","Zenith Bank"]
     const ids = ["Voters card", "NIN", "Drivers Licence", "International Passport"]
     const details = [
       {options: ids, type: "text", name: "ID Type", placeholder: "Voters Card", value: idType, edit: (value: string)=>{setIdType(value)}},
@@ -28,6 +30,10 @@ function BankingDetails() {
       {type: 'tel', name: "Account Number", placeholder: "0123456789", value: phoneNumber, edit: (value: string)=>{setAccountNumber(value)}},
       {type: "text", name: "Account Name", placeholder: "Chijioke", value: address, edit: (value: string)=>{setAccountName(value)}}
   ]
+
+  const submit = () =>{
+    setShowDialog(true)
+  }
   return (
     <div className="flex px-4 py-4 font-inter">
       <div className="md:flex md:w-[65%] w-[100%] relative">
@@ -43,13 +49,13 @@ function BankingDetails() {
               Last page! How do we pay you when your tickets sold?
             </p>
           </div>
-          <form className="flex flex-wrap w-[100%] gap-4 ">
+          <form className="flex flex-wrap w-[100%] gap-4">
             {details.map(({ options, name, value, type, placeholder, edit}, index)=>{
                 return (    
                     options ?
-                    <div>
+                    <div className="w-[48%] my-3 ">
                          <label className="text-[14px]">{name}</label>
-                        <select name="" id="" className="w-full border border-solid border-[#D0D5DD] h-[36px] mt-2 rounded-[6px] px-[12px] py-[8px]">
+                        <select className="w-full border border-solid border-[#D0D5DD] h-[36px] mt-2 rounded-[6px] px-[12px] py-[8px]">
                     {options?.map((option)=>{
                         return (
                             <option value={option}>{option}</option>
@@ -58,7 +64,7 @@ function BankingDetails() {
                   </select>
                     </div>
                      :                          
-          <div className="my-3 relative w-[47%]" key={index}>
+          <div className="my-3 relative w-[48%]" key={index}>
                 <label className="text-[14px]">{name}</label>
                 <input
                     type={type}
@@ -75,9 +81,10 @@ function BankingDetails() {
           <div className="py-6 flex flex-col justify-center items-center gap-4">
           <button
               type="submit"
-              className="text-white bg-success400 w-[80%] py-[8px] px-[16px] rounded-[8px] font-sans font-medium"
+              className="text-white bg-success400 w-[100%] py-[8px] px-[16px] rounded-[8px] font-sans font-medium"
+              onClick={submit}
             >
-             <p>Proceed</p>
+             <p>Submit</p>
             </button>
             <div>Already an Event Creator? <Link href='/authentication/login' className='text-success400'>Click here</Link></div>
 
@@ -88,7 +95,7 @@ function BankingDetails() {
       {numbers.map((number)=>{
         return (
           <div className="flex items-center">
-            <div className={"flex w-[35px] h-[35px] rounded-full justify-center items-center " + (number < page ? "bg-success400" : 'bg-grey400')}>
+            <div className={"flex w-[35px] h-[35px] rounded-full justify-center items-center " + (number < 3 ? "bg-success400" : 'bg-grey400')}>
               {number}
             </div>
             {number < 3 ?
@@ -102,6 +109,7 @@ function BankingDetails() {
       </div>
      
       <Image src={sideImage} alt="Onboarding Image" className="hidden md:flex w-[35%] max-h-full "/>
+      <DialogDemo isOpen={showDialog} onOpenChange={setShowDialog} data={{title:"New EventCreator", details:"Thank you for signing up. Create an event by clicking next.",button:"Next"}}/>
     </div>
   );
 }

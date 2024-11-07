@@ -2,13 +2,14 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
 import PopMessageIcon from "../icons/PopMessageIcon";
-
+import GreenPopMessageIcon from "../icons/GreenPopupMessage";
 interface DialogDemoProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  data: {title: string, details: string, button: string};
 }
 
-export function DialogDemo({ isOpen, onOpenChange }: DialogDemoProps) {
+export function DialogDemo({ isOpen, onOpenChange, data }: DialogDemoProps) {
   const router = useRouter();
 
   const handleClick = () => {
@@ -21,22 +22,22 @@ export function DialogDemo({ isOpen, onOpenChange }: DialogDemoProps) {
       <DialogContent className="sm:max-w-[425px]">
         <div className="flex flex-col gap-[53px] items-center mx-auto text-center justify-center">
           <div>
-            <PopMessageIcon />
+            {data.title === "New EventCreator" ? <GreenPopMessageIcon/> : <PopMessageIcon/>}
           </div>
           <div className="space-y-[10px]">
-            <h4 className="text-[20px] font-medium">Account Approved</h4>
+            <h4 className="text-[20px] font-medium">{data.title}</h4>
             <p className="text-[#919BA7] font-medium">
-              Let’s get right into checking out great events!
+            {data.details}
             </p>
           </div>
         </div>
-        <DialogFooter className="mx-auto text-center mt-[42px]">
+        <DialogFooter className="mx-auto text-center mt-[10px] w-[80%]">
           <Button
             onClick={handleClick}
             type="submit"
-            className="bg-[#1671D9] mx-auto text-white w-full max-w-[188px]"
+            className={ data.title === "New EventCreator" ? "flex text-white w-full bg-success300" :"flex text-white w-full bg-secondary"}
           >
-            Continue
+            {data.button}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -26,7 +26,6 @@ const router = useRouter()
   const [preferredName, setPreferredName] = useState("");
   const [address, setAddress] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [page, setPage] = useState(2)
 
   const nextpage = () =>{
     router.push("/authentication/add-creator/banking")
@@ -47,7 +46,6 @@ const data = {
 }
   return (
     <div >
-      {page === 2 ? 
     <div className="flex px-4 py-4 font-inter">
       <div className="md:flex md:w-[65%] w-[100%] relative">
         <div className="lg:flex-1 lg:px-[8rem]">
@@ -102,7 +100,7 @@ const data = {
       {numbers.map((number)=>{
         return (
           <div className="flex items-center">
-            <div onClick={nextpage} className={"flex w-[35px] h-[35px]  rounded-full justify-center items-center " + (number < page ? "bg-success400" : 'bg-grey400')}>
+            <div onClick={nextpage} className={"flex w-[35px] h-[35px]  rounded-full justify-center items-center " + (number < 2 ? "bg-success400" : 'bg-grey400')}>
               {number}
             </div>
             {number < 3 ?
@@ -115,9 +113,7 @@ const data = {
       </div>
       </div>
       <Image src={sideImage} alt="Onboarding Image" className="hidden md:flex w-[35%] max-h-full "/>
-    </div> : <BankingDetails/>
-    }
-
+    </div> 
     </div>
   );
 }

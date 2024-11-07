@@ -136,7 +136,7 @@ function Page() {
       </div>
 
       {showDialog && (
-        <DialogDemo isOpen={showDialog} onOpenChange={setShowDialog} />
+        <DialogDemo isOpen={showDialog} onOpenChange={setShowDialog} data={{title: 'Account Approved', details:"Let’s get right into checking out great events!", button: "Continue"}}/>
       )}
     </div>
   );
