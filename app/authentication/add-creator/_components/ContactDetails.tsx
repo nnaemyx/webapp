@@ -6,8 +6,8 @@ import Link from "next/link";
 import Stylizedlogo from "/public/assests/stylized logo.png";
 import EyeShowIcon from "@/components/icons/EyeShowIcon";
 import EyeHideIcon from "@/components/icons/EyeHideIcon";
-import sideImage from "/public/assests/signup image.png"
-import BankingDetails from "./BankingInfo";
+import sideImage from "/public/assests/signup image.png";
+import { useEventCreatorContext } from './context';
 import { useRouter } from "next/navigation";
 
 function ContactDetails() {
@@ -19,31 +19,35 @@ const router = useRouter()
 
   const [email, setEmail] = useState("");
   const [firstname, setFirstname] = useState("");
-  const [SurName, setSurName] = useState("");
+  const [surname, setSurName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [preferredName, setPreferredName] = useState("");
+  const [username, setPreferredName] = useState("");
   const [address, setAddress] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const nextpage = () =>{
-    router.push("/authentication/add-creator/banking")
-  }
+  
     const numbers = [1,2,3]
    const details = [
     {type: "text", name: "First name", placeholder: "Chijioke", value: firstname, edit: (value: string)=>{setFirstname(value)}},
-    {type: "text", name: "Surname", placeholder: "Earnest", value: SurName, edit: (value: string)=>{setSurName(value)}},
+    {type: "text", name: "Surname", placeholder: "Earnest", value: surname, edit: (value: string)=>{setSurName(value)}},
     {type: 'email', name: "Email Address", placeholder: "your email goes here", value: email, edit: (value: string)=>{setEmail(value)}},
     {type: 'tel', name: "Phone Number", placeholder: "To learn about your event quicker", value: phoneNumber, edit: (value: string)=>{setPhoneNumber(value)}},
     {type: "text", name: "Physical Address", placeholder: "Where you work your magic!", value: address, edit: (value: string)=>{setAddress(value)}}, 
     {type: showPassword ? 'text' : "password" , name: "Password", placeholder: "*******", value: password, edit: (value: string)=>{setPassword(value)}},
     {type: showPassword ? 'text' : "password", name: "Confirm Password", placeholder: "*******", value: confirmPassword, edit: (value: string)=>{setConfirmPassword(value)}},
-    {type: "text", name: "Preferred Name", placeholder: "Would appear as ticket issuer", value: preferredName, edit: (value: string)=>{setPreferredName(value)}},
+    {type: "text", name: "Preferred Name", placeholder: "Would appear as ticket issuer", value: username, edit: (value: string)=>{setPreferredName(value)}},
 ]
-const data = {
-  firstname, SurName, password,confirmPassword, phoneNumber, preferredName, address, 
-}
+
+const {data, setData} = useEventCreatorContext()
+  const nextpage = () =>{
+    setData({...data, firstname : firstname, surname, email, phoneNumber, address, password, username})
+    router.push("/authentication/add-creator/banking")
+  }
+  
+  console.log(data)
+
   return (
     <div >
     <div className="flex px-4 py-4 font-inter">
@@ -99,7 +103,7 @@ const data = {
       <div className="flex items-center absolute right-2 top-[100px]">
       {numbers.map((number)=>{
         return (
-          <div className="flex items-center">
+          <div className="flex items-center" key={number}>
             <div onClick={nextpage} className={"flex w-[35px] h-[35px]  rounded-full justify-center items-center " + (number < 2 ? "bg-success400" : 'bg-grey400')}>
               {number}
             </div>

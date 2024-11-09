@@ -9,10 +9,6 @@ import React,{ useEffect } from "react";
 function Navbar() {
   const { isLoggedIn, logout} = useAuthStore();
 
-  // useEffect(() => {
-  //   initialize();
-  // }, [initialize]);
-
   return (
     <div className="hidden lg:block px-[4rem]">
       <div className="flex justify-between items-center">

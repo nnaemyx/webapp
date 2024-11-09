@@ -46,7 +46,7 @@ export default function Home() {
           </div>
           <div className="md:mt-16 mt-8 font-aeonik flex flex-col md:flex-row w-full mx-auto gap-4 justify-center">
             <Link
-              href="/authentication"
+              href="/authentication/signup"
               className="bg-[#EBEEF3] rounded-[8px] md:w-[168.5px] p-[10px] text-center "
             >
               <button>Discover Events</button>
