@@ -4,8 +4,9 @@ import React, {useState, useEffect} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Stylizedlogo from "/public/assests/stylized logo.png";
-import sideImage from "/public/assests/signup image.png"
+import sideImage from "/public/assests/signup image.png";
 import { DialogDemo } from "@/components/popup/EventgoerOtp";
+import { useEventCreatorContext } from './context';
 
 function BankingDetails() {
 
@@ -13,11 +14,11 @@ function BankingDetails() {
     window.scrollTo(0, 0)
   }, [])
 
-  const [email, setBankName] = useState("");
-  const [idType, setIdType] = useState("");
+  const [bank, setBankName] = useState("Access Bank");
+  const [idType, setIdType] = useState("Voters card");
   const [idNumber, setIdNumber] = useState("");
-  const [phoneNumber, setAccountNumber] = useState("");
-  const [address, setAccountName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [accountName, setAccountName] = useState("");
   const [showDialog, setShowDialog] = useState(false);
   const numbers = [1,2,3]
  
@@ -26,14 +27,17 @@ function BankingDetails() {
     const details = [
       {options: ids, type: "text", name: "ID Type", placeholder: "Voters Card", value: idType, edit: (value: string)=>{setIdType(value)}},
       {type: "text", name: "ID Number", placeholder: "0123456789", value: idNumber, edit: (value: string)=>{setIdNumber(value)}},
-      {options: banks, type: 'text', name: "Bank Name", placeholder: "FirstBank Plc", value: email, edit: (value: string)=>{setBankName(value)}},
-      {type: 'tel', name: "Account Number", placeholder: "0123456789", value: phoneNumber, edit: (value: string)=>{setAccountNumber(value)}},
-      {type: "text", name: "Account Name", placeholder: "Chijioke", value: address, edit: (value: string)=>{setAccountName(value)}}
+      {options: banks, type: 'text', name: "Bank Name", placeholder: "FirstBank Plc", value: bank, edit: (value: string)=>{setBankName(value)}},
+      {type: 'tel', name: "Account Number", placeholder: "0123456789", value: accountNumber, edit: (value: string)=>{setAccountNumber(value)}},
+      {type: "text", name: "Account Name", placeholder: "Chijioke", value: accountName, edit: (value: string)=>{setAccountName(value)}}
   ]
-
+  const {data, setData} = useEventCreatorContext()
   const submit = () =>{
-    setShowDialog(true)
+    setData({...data, ID_Type: idType, ID_Number: idNumber, Bank_Name: bank, Bank_AccountName: accountName, Bank_AccountNumber: accountNumber })
+    // setShowDialog(true)
   }
+  console.log(data)
+  
   return (
     <div className="flex px-4 py-4 font-inter">
       <div className="md:flex md:w-[65%] w-[100%] relative">
@@ -53,12 +57,12 @@ function BankingDetails() {
             {details.map(({ options, name, value, type, placeholder, edit}, index)=>{
                 return (    
                     options ?
-                    <div className="w-[48%] my-3 ">
+                    <div className="w-[48%] my-3 " key={name}>
                          <label className="text-[14px]">{name}</label>
                         <select className="w-full border border-solid border-[#D0D5DD] h-[36px] mt-2 rounded-[6px] px-[12px] py-[8px]">
                     {options?.map((option)=>{
                         return (
-                            <option value={option}>{option}</option>
+                            <option value={option} key={option}>{option}</option>
                         )
                     })}
                   </select>
@@ -94,7 +98,7 @@ function BankingDetails() {
         <div className="flex items-center absolute right-2 top-[100px]">
       {numbers.map((number)=>{
         return (
-          <div className="flex items-center">
+          <div className="flex items-center" key={number}>
             <div className={"flex w-[35px] h-[35px] rounded-full justify-center items-center " + (number < 3 ? "bg-success400" : 'bg-grey400')}>
               {number}
             </div>

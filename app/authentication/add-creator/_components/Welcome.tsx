@@ -4,8 +4,14 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Stylizedlogo from "/public/assests/stylized logo.png";
 import Link from 'next/link';
-import ContactDetails from './ContactDetails';
+import { useEventCreatorContext } from './context';
 import { useRouter } from "next/navigation";
+import { useToast } from '@/components/ui/use-toast';
+
+  const accounts = [
+    {type: "Individual", description: "A great pal who wants to host your parties on Entrypal", selected: false},
+    {type: "Business Firm/Agency/Company", description: "An event place, record label, etc? Create events for a global audience on entrypal", selected: false}
+  ]
 
 const Welcome = () => {
 const router = useRouter()
@@ -14,23 +20,27 @@ const router = useRouter()
   }, [])
 
   const [typeChecked, setTypeChecked] = useState("")
-  const [page, setPage] = useState("1")
-  const accounts = [
-    {type: "Individual", description: "A great pal who wants to host your parties on Entrypal", selected: false},
-    {type: "Business Firm/Agency/Company", description: "An event place, record label, etc? Create events for a global audience on entrypal", selected: false}
-  ]
+  const { toast } = useToast();
 
   const handleChange =(e: any)=>{
     setTypeChecked(e.target.value)
   }
-
+  const {data, setData} = useEventCreatorContext()
   const nextpage = () =>{
-    router.push('/authentication/add-creator/contact')
+    typeChecked === '' ? 
+       toast({
+          variant: "destructive",
+          description: "Please select an account type",
+        })
+  :
+  setData({...data, type : typeChecked})
+    router.push('/authentication/add-creator/contact' )
   }
   
+  console.log(data)
+ 
   return (
     <div>
-      {page === "1"? 
   <div className='flex justify-center items-center flex-col text-center gap-5 w-[80%] m-auto '>
     <Image src={Stylizedlogo} alt="logo" />
     <div className=''>
@@ -41,7 +51,7 @@ const router = useRouter()
     <div className='flex h-[300px] gap-4 justify-center text-left'>
       {accounts.map(({type, description})=>{
         return (
-          <div className='bg-gray-100 w-[45%] h-[100%] rounded-lg p-3'>
+          <div key={type} className='bg-gray-100 w-[45%] h-[100%] rounded-lg p-3 hover:cursor-pointer' onClick={()=>setTypeChecked(type)}>
             <div className='h-[65%] w-full '>
               <input checked={typeChecked === type ? true : false } onChange={e => handleChange(e)} className='accent-success400' type="checkbox" name={type} id="" value={type} />
             </div>
@@ -63,10 +73,8 @@ const router = useRouter()
             <div>Already an Event Creator? <Link href='/authentication/login' className='text-success400'>Click here</Link></div>
 
             <div className='text-grey400'>By continuing past this page, you acknowledge that you read, and agree to our <Link href='' className='underline text-grey700 '>Terms & Conditions for Eventcreators</Link> and our <Link href='' className='underline text-grey700'>Eventcreators Service Agreement</Link>.</div>
-  </div>:
-  <ContactDetails/>
-    }
-    </div>
+  </div>
+  </div>
   )
 }
 
