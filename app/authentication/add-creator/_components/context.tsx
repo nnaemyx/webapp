@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState } from 'react'
 
-type dataType = {
+export type dataType = {
   type: string;
   firstname: string;
   surname: string;

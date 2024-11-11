@@ -46,8 +46,6 @@ const {data, setData} = useEventCreatorContext()
     router.push("/authentication/add-creator/banking")
   }
   
-  console.log(data)
-
   return (
     <div >
     <div className="flex px-4 py-4 font-inter">
