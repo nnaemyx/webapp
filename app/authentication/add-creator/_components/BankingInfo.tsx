@@ -47,7 +47,7 @@ function BankingDetails() {
           </div>
           <div>
             <h1 className="text-[24px] font-semibold text-success400">
-              03 - Banking Information
+              03 - Banking Information  
             </h1>
             <p className="text-[14px] text-[#645D5D]">
               Last page! How do we pay you when your tickets sold?
