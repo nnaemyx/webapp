@@ -6,13 +6,7 @@ import Link from "next/link";
 import Stylizedlogo from "/public/assests/stylized logo.png";
 import sideImage from "/public/assests/signup image.png";
 import { DialogDemo } from "@/components/popup/EventgoerOtp";
-import { dataType, useEventCreatorContext } from './context';
-import { callApi } from "@zayne-labs/callapi";
-import { toast } from "@/components/ui/use-toast";
-
-const eventCreatorCallApi = callApi.create(
-  { method: 'POST', credentials: 'include', dedupeStrategy: "none"}
-)
+import { useEventCreatorContext } from './context';
 
 function BankingDetails() {
 
@@ -26,7 +20,6 @@ function BankingDetails() {
   const [accountNumber, setAccountNumber] = useState("");
   const [accountName, setAccountName] = useState("");
   const [showDialog, setShowDialog] = useState(false);
-  const [eventCreator, setEventCreator] = useState({})
   const numbers = [1,2,3]
  
     const banks = ["Access Bank" ,"Citibank","Diamond Bank","Dynamic Standard Bank","Ecobank Nigeria","Fidelity Bank Nigeria","First Bank of Nigeria","First City Monument Bank","Guaranty Trust Bank","Heritage Bank Plc","Jaiz Bank","Keystone Bank Limited","Providus Bank Plc","Polaris Bank", "Opay","Palmpay", "Stanbic IBTC Bank Nigeria Limited","Standard Chartered Bank","Sterling Bank","Suntrust Bank Nigeria Limited","Union Bank of Nigeria","United Bank for Africa","Unity Bank Plc","Wema Bank","Zenith Bank"]
@@ -39,26 +32,11 @@ function BankingDetails() {
       {type: "text", name: "Account Name", placeholder: "Chijioke", value: accountName, edit: (value: string)=>{setAccountName(value)}}
   ]
   const {data, setData} = useEventCreatorContext()
-  const submit = async() =>{
-    setEventCreator(async()=>{
-      const newData = {...data, ID_Type: idType, ID_Number: idNumber, Bank_Name: bank, Bank_AccountName: accountName, Bank_AccountNumber: accountNumber }
-      console.log(newData)
-      await eventCreatorCallApi<{message: string, User:{name: string}} >( process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? 'api/goer/user' : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/user`,
-            {body: newData, method: "POST",
-             onResponse: ({data})=>{
-               toast({
-                 description: `${data.message} Welcome ${data.User.name}`
-               });
-             },
-             onError: ({ error})=>{     
-                 toast({
-                   variant: "destructive",
-                   description: error.message,
-                 });       
-             }
-    })
-
-  })}
+  const submit = () =>{
+    setData({...data, ID_Type: idType, ID_Number: idNumber, Bank_Name: bank, Bank_AccountName: accountName, Bank_AccountNumber: accountNumber })
+    // setShowDialog(true)
+  }
+  console.log(data)
   
   return (
     <div className="flex px-4 py-4 font-inter">

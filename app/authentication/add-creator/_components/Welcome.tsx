@@ -36,6 +36,8 @@ const router = useRouter()
   setData({...data, type : typeChecked})
     router.push('/authentication/add-creator/contact' )
   }
+  
+  console.log(data)
  
   return (
     <div>

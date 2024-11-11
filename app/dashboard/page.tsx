@@ -35,7 +35,7 @@ function Page() {
           username: string,
           email: string,
           phoneNumber: string
-         }}>( process.env.NEXT_PUBLIC_NEXT_ENV === "developmen" ? '/api/goer/user' : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/user`, { credentials: 'include', dedupeStrategy: "none", auth: accessToken ? accessToken : " " });
+         }}>( process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? '/api/goer/user' : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/goer/user`, { credentials: 'include', dedupeStrategy: "none", auth: accessToken ? accessToken : " " });
          if(error){
           toast({
             variant: "destructive",

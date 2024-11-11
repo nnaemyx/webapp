@@ -10,17 +10,18 @@ import Missionpics from "/public/assests/Missionpics.png";
 function Page() {
   return (
     <div className="w-full mt-8">
-    <div className="flex flex-col-reverse lg:flex-row items-center w-[100%]">
-      <div className=" lg:ml-[4rem] w-[100%]">
+    <div className="flex flex-col-reverse lg:flex-row   items-end ">
+      <div className=" lg:mx-[4rem] px-4">
         <p className="text-[#898D9C] lg:text-[22px] text-[18px] font-aeonik">
           About Entrypal
         </p>
-        <h1 className="text-[#0C2455] lg:text-[63px] text-[25px] lg:tracking-[-1.555px] tracking-[-0.8px] leading-[102.5%] font-semibold">
-          We <span className="text-[#236DFF]">reimagine</span> the future of event experience.
+        <h1 className="text-[#0C2455] lg:text-[70px] text-[25px] lg:tracking-[-1.555px] tracking-[-0.8px] leading-[102.5%] font-semibold">
+          We build to <span className="text-[#236DFF]">Reimagine</span> the
+          Future of Event Creation and Experiences
         </h1>
       </div>
-      <div className="w-[70%]">
-        <Image src={Aboutimage} alt="about image"/>
+      <div className="w-[100%]">
+        <Image src={Aboutimage} alt="about image" />
       </div>
     </div>
     <div className="lg:bg-[#EEF1FF] mt-[4rem] lg:h-[532px]">
