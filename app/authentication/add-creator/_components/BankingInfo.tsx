@@ -6,7 +6,12 @@ import Link from "next/link";
 import Stylizedlogo from "/public/assests/stylized logo.png";
 import sideImage from "/public/assests/signup image.png";
 import { DialogDemo } from "@/components/popup/EventgoerOtp";
-import { useEventCreatorContext } from './context';
+import { dataType, useEventCreatorContext } from './context';
+import { callApi } from "@zayne-labs/callapi";
+import { toast } from "@/components/ui/use-toast";
+const eventCreatorCallApi = callApi.create(
+  { method: 'POST', credentials: 'include', dedupeStrategy: "none"}
+)
 
 function BankingDetails() {
 
@@ -20,23 +25,39 @@ function BankingDetails() {
   const [accountNumber, setAccountNumber] = useState("");
   const [accountName, setAccountName] = useState("");
   const [showDialog, setShowDialog] = useState(false);
+  const [eventCreator, setEventCreator] = useState({})
   const numbers = [1,2,3]
  
     const banks = ["Access Bank" ,"Citibank","Diamond Bank","Dynamic Standard Bank","Ecobank Nigeria","Fidelity Bank Nigeria","First Bank of Nigeria","First City Monument Bank","Guaranty Trust Bank","Heritage Bank Plc","Jaiz Bank","Keystone Bank Limited","Providus Bank Plc","Polaris Bank", "Opay","Palmpay", "Stanbic IBTC Bank Nigeria Limited","Standard Chartered Bank","Sterling Bank","Suntrust Bank Nigeria Limited","Union Bank of Nigeria","United Bank for Africa","Unity Bank Plc","Wema Bank","Zenith Bank"]
     const ids = ["Voters card", "NIN", "Drivers Licence", "International Passport"]
     const details = [
       {options: ids, type: "text", name: "ID Type", placeholder: "Voters Card", value: idType, edit: (value: string)=>{setIdType(value)}},
-      {type: "text", name: "ID Number", placeholder: "0123456789", value: idNumber, edit: (value: string)=>{setIdNumber(value)}},
+      {type: "tel", name: "ID Number", placeholder: "0123456789", value: idNumber, edit: (value: string)=>{setIdNumber(value)}},
       {options: banks, type: 'text', name: "Bank Name", placeholder: "FirstBank Plc", value: bank, edit: (value: string)=>{setBankName(value)}},
       {type: 'tel', name: "Account Number", placeholder: "0123456789", value: accountNumber, edit: (value: string)=>{setAccountNumber(value)}},
       {type: "text", name: "Account Name", placeholder: "Chijioke", value: accountName, edit: (value: string)=>{setAccountName(value)}}
   ]
   const {data, setData} = useEventCreatorContext()
-  const submit = () =>{
-    setData({...data, ID_Type: idType, ID_Number: idNumber, Bank_Name: bank, Bank_AccountName: accountName, Bank_AccountNumber: accountNumber })
-    // setShowDialog(true)
-  }
-  console.log(data)
+  const submit = async() =>{
+    setEventCreator(async()=>{
+      const newData = {...data, ID_Type: idType, ID_Number: idNumber, Bank_Name: bank, Bank_AccountName: accountName, Bank_AccountNumber: accountNumber }
+      console.log(newData)
+      await eventCreatorCallApi<{message: string, User:{name: string}} >( process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? 'http://localhost:5000/api/creator/signup' : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/creator/signup`,
+            {body: newData, method: "POST",
+             onResponse: ({data})=>{
+               toast({
+                 description: `${data.message} Welcome ${data.User.name}`
+               });
+               setShowDialog(true)
+             },
+             onError: ({ error})=>{     
+                 toast({
+                   variant: "destructive",
+                   description: error.message,
+                 });       
+             }
+    })
+  })}
   
   return (
     <div className="flex px-4 py-4 font-inter">
@@ -92,7 +113,7 @@ function BankingDetails() {
             </button>
             <div>Already an Event Creator? <Link href='/authentication/login' className='text-success400'>Click here</Link></div>
 
-            <div className='text-grey400'>By continuing past this page, you acknowledge that you read, and agree to our <Link href='' className='underline text-grey700 '>Terms & Conditions for Eventcreators</Link> and our <Link href='' className='underline text-grey700'>Eventcreators Service Agreement</Link>.</div>
+            <div className='text-grey400 text-[12px]'>By continuing past this page, you acknowledge that you read, and agree to our <Link href='' className='underline text-grey700 '>Terms & Conditions for Eventcreators</Link> and our <Link href='' className='underline text-grey700'>Eventcreators Service Agreement</Link>.</div>
           </div>
         </div>
         <div className="flex items-center absolute right-2 top-[100px]">

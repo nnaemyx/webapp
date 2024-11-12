@@ -14,7 +14,8 @@ export function DialogDemo({ isOpen, onOpenChange, data }: DialogDemoProps) {
 
   const handleClick = () => {
     onOpenChange(false); // Close the dialog
-    router.push("/dashboard");
+    data.title === "New EventCreator"? 
+    router.push("/authentication/add-event"): router.push("/dashboard")
   };
 
   return (

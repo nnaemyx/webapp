@@ -9,6 +9,7 @@ import EyeHideIcon from "@/components/icons/EyeHideIcon";
 import sideImage from "/public/assests/signup image.png";
 import { useEventCreatorContext } from './context';
 import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
 
 function ContactDetails() {
 const router = useRouter()
@@ -35,18 +36,24 @@ const router = useRouter()
     {type: 'email', name: "Email Address", placeholder: "your email goes here", value: email, edit: (value: string)=>{setEmail(value)}},
     {type: 'tel', name: "Phone Number", placeholder: "To learn about your event quicker", value: phoneNumber, edit: (value: string)=>{setPhoneNumber(value)}},
     {type: "text", name: "Physical Address", placeholder: "Where you work your magic!", value: address, edit: (value: string)=>{setAddress(value)}}, 
-    {type: showPassword ? 'text' : "password" , name: "Password", placeholder: "*******", value: password, edit: (value: string)=>{setPassword(value)}},
-    {type: showPassword ? 'text' : "password", name: "Confirm Password", placeholder: "*******", value: confirmPassword, edit: (value: string)=>{setConfirmPassword(value)}},
+    {pattern:".{8,}", title:"Eight or more characters", type: showPassword ? 'text' : "password" , name: "Password", placeholder: "*******", value: password, edit: (value: string)=>{setPassword(value)}},
+    {pattern:".{8,}" ,title:"Eight or more characters", type: showPassword ? 'text' : "password", name: "Confirm Password", placeholder: "*******", value: confirmPassword, edit: (value: string)=>{setConfirmPassword(value)}},
     {type: "text", name: "Preferred Name", placeholder: "Would appear as ticket issuer", value: username, edit: (value: string)=>{setPreferredName(value)}},
 ]
 
 const {data, setData} = useEventCreatorContext()
   const nextpage = () =>{
-    setData({...data, firstname : firstname, surname, email, phoneNumber, address, password, username})
-    router.push("/authentication/add-creator/banking")
+    if(password != confirmPassword){
+      toast({
+        variant: "destructive",
+        description: "Passwords do not match"
+      })
+    }else{
+      setData({...data, firstname : firstname, surname, email, phoneNumber, address, password, username})
+      router.push("/authentication/add-creator/banking")
+    }
   }
   
-  console.log(data)
 
   return (
     <div >
@@ -64,8 +71,8 @@ const {data, setData} = useEventCreatorContext()
               Your event access experience is about to get fun!
             </p>
           </div>
-          <form className="flex flex-wrap w-[100%] gap-4 ">
-            {details.map(({name, value, type, placeholder, edit}, index)=>{
+          <form className="flex flex-wrap w-[100%] gap-4 " onSubmit={nextpage}>
+            {details.map(({name, value, type, placeholder, edit, pattern, title}, index)=>{
                 return (         
           <div className={name != 'Email Address' && name != 'Preferred Name' ? "my-3 relative w-[47%]" : 'w-[100%] my-3 relative'} key={index}>
                 <label className="text-[14px]">{name}</label>
@@ -73,6 +80,8 @@ const {data, setData} = useEventCreatorContext()
                     type={type}
                     value={value}
                     placeholder={placeholder}
+                    pattern={pattern}
+                    title={title}
                     onChange={(e) => edit(e.target.value)}
                     className="w-full border border-solid border-[#D0D5DD] h-[36px] mt-2 rounded-[6px] px-[12px] py-[8px]"
                     required
@@ -97,7 +106,7 @@ const {data, setData} = useEventCreatorContext()
             </button>
             <div>Already an Event Creator? <Link href='/authentication/login' className='text-success400'>Click here</Link></div>
 
-            <div className='text-grey400'>By continuing past this page, you acknowledge that you read, and agree to our <Link href='' className='underline text-grey700 '>Terms & Conditions for Eventcreators</Link> and our <Link href='' className='underline text-grey700'>Eventcreators Service Agreement</Link>.</div>
+            <div className='text-grey400 text-[12px]'>By continuing past this page, you acknowledge that you read, and agree to our <Link href='' className='underline text-grey700 '>Terms & Conditions for Eventcreators</Link> and our <Link href='' className='underline text-grey700'>Eventcreators Service Agreement</Link>.</div>
           </div>
         </div>
       <div className="flex items-center absolute right-2 top-[100px]">
