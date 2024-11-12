@@ -9,8 +9,8 @@ import { useRouter } from "next/navigation";
 import { useToast } from '@/components/ui/use-toast';
 
   const accounts = [
-    {type: "Individual", description: "A great pal who wants to host your parties on Entrypal", selected: false},
-    {type: "Business Firm/Agency/Company", description: "An event place, record label, etc? Create events for a global audience on entrypal", selected: false}
+    {type:"Individual", name: "Individual", description: "A great pal who wants to host your parties on Entrypal", selected: false},
+    {type:"Business",name: "Business Firm/Agency/Company", description: "An event place, record label, etc? Create events for a global audience on entrypal", selected: false}
   ]
 
 const Welcome = () => {
@@ -49,14 +49,14 @@ const router = useRouter()
     </div>
 
     <div className='flex h-[300px] gap-4 justify-center text-left'>
-      {accounts.map(({type, description})=>{
+      {accounts.map(({name, type, description})=>{
         return (
           <div key={type} className='bg-gray-100 w-[45%] h-[100%] rounded-lg p-3 hover:cursor-pointer' onClick={()=>setTypeChecked(type)}>
             <div className='h-[65%] w-full '>
               <input checked={typeChecked === type ? true : false } onChange={e => handleChange(e)} className='accent-success400' type="checkbox" name={type} id="" value={type} />
             </div>
             <div className='md:h-[35%] h-[40%]'>
-            <div className={ typeChecked === type ?'text-success400' : ""}>{type}</div>
+            <div className={ typeChecked === type ?'text-success400' : ""}>{name}</div>
             <div className='text-[12px]'>{description}</div>
             </div>
           </div>
@@ -72,7 +72,7 @@ const router = useRouter()
             </button>
             <div>Already an Event Creator? <Link href='/authentication/login' className='text-success400'>Click here</Link></div>
 
-            <div className='text-grey400'>By continuing past this page, you acknowledge that you read, and agree to our <Link href='' className='underline text-grey700 '>Terms & Conditions for Eventcreators</Link> and our <Link href='' className='underline text-grey700'>Eventcreators Service Agreement</Link>.</div>
+            <div className='text-grey400 text-[12px]'>By continuing past this page, you acknowledge that you read, and agree to our <Link href='' className='underline text-grey700 '>Terms & Conditions for Eventcreators</Link> and our <Link href='' className='underline text-grey700'>Eventcreators Service Agreement</Link>.</div>
   </div>
   </div>
   )

@@ -15,13 +15,12 @@ function Page() {
         <p className="text-[#898D9C] lg:text-[22px] text-[18px] font-aeonik">
           About Entrypal
         </p>
-        <h1 className="text-[#0C2455] lg:text-[70px] text-[25px] lg:tracking-[-1.555px] tracking-[-0.8px] leading-[102.5%] font-semibold">
-          We build to <span className="text-[#236DFF]">Reimagine</span> the
-          Future of Event Creation and Experiences
+        <h1 className="text-[#0C2455] lg:text-[63px] text-[25px] lg:tracking-[-1.555px] tracking-[-0.8px] leading-[102.5%] font-semibold">
+          We <span className="text-[#236DFF]">reimagine</span> the future of event experience.
         </h1>
       </div>
-      <div className="w-[100%]">
-        <Image src={Aboutimage} alt="about image" />
+      <div className="w-[70%]">
+        <Image src={Aboutimage} alt="about image"/>
       </div>
     </div>
     <div className="lg:bg-[#EEF1FF] mt-[4rem] lg:h-[532px]">
