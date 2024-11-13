@@ -26,6 +26,7 @@ function BankingDetails() {
   const [accountName, setAccountName] = useState("");
   const [showDialog, setShowDialog] = useState(false);
   const [eventCreator, setEventCreator] = useState({})
+  const [loading, setLoading] = useState(false)
   const numbers = [1,2,3]
  
     const banks = ["Access Bank" ,"Citibank","Diamond Bank","Dynamic Standard Bank","Ecobank Nigeria","Fidelity Bank Nigeria","First Bank of Nigeria","First City Monument Bank","Guaranty Trust Bank","Heritage Bank Plc","Jaiz Bank","Keystone Bank Limited","Providus Bank Plc","Polaris Bank", "Opay","Palmpay", "Stanbic IBTC Bank Nigeria Limited","Standard Chartered Bank","Sterling Bank","Suntrust Bank Nigeria Limited","Union Bank of Nigeria","United Bank for Africa","Unity Bank Plc","Wema Bank","Zenith Bank"]
@@ -39,6 +40,7 @@ function BankingDetails() {
   ]
   const {data, setData} = useEventCreatorContext()
   const submit = async() =>{
+    setLoading(true)
     setEventCreator(async()=>{
       const newData = {...data, ID_Type: idType, ID_Number: idNumber, Bank_Name: bank, Bank_AccountName: accountName, Bank_AccountNumber: accountNumber }
       console.log(newData)
@@ -49,12 +51,14 @@ function BankingDetails() {
                  description: `${data.message} Welcome ${data.User.name}`
                });
                setShowDialog(true)
+               setLoading(false)
              },
              onError: ({ error})=>{     
                  toast({
                    variant: "destructive",
                    description: error.message,
-                 });       
+                 });    
+                 setLoading(false)   
              }
     })
   })}
@@ -78,7 +82,7 @@ function BankingDetails() {
             {details.map(({ options, name, value, type, placeholder, edit}, index)=>{
                 return (    
                     options ?
-                    <div className="w-[48%] my-3 " key={name}>
+                    <div className="w-[100%] md:w-[48%] my-3" key={name}>
                          <label className="text-[14px]">{name}</label>
                         <select className="w-full border border-solid border-[#D0D5DD] h-[36px] mt-2 rounded-[6px] px-[12px] py-[8px]">
                     {options?.map((option)=>{
@@ -89,7 +93,7 @@ function BankingDetails() {
                   </select>
                     </div>
                      :                          
-          <div className="my-3 relative w-[48%]" key={index}>
+          <div className="w-full my-3 relative md:w-[48%]" key={index}>
                 <label className="text-[14px]">{name}</label>
                 <input
                     type={type}
@@ -109,14 +113,19 @@ function BankingDetails() {
               className="text-white bg-success400 w-[100%] py-[8px] px-[16px] rounded-[8px] font-sans font-medium"
               onClick={submit}
             >
-             <p>Submit</p>
+             {loading? <div
+                  className="spinner-border animate-spin text-white inline-block w-4 h-4 border-4 rounded-full"
+                  role="status"
+                >
+                  <span className="sr-only">Loading...</span>
+                </div> : <p> Submit </p>}
             </button>
             <div>Already an Event Creator? <Link href='/authentication/login' className='text-success400'>Click here</Link></div>
 
             <div className='text-grey400 text-[12px]'>By continuing past this page, you acknowledge that you read, and agree to our <Link href='' className='underline text-grey700 '>Terms & Conditions for Eventcreators</Link> and our <Link href='' className='underline text-grey700'>Eventcreators Service Agreement</Link>.</div>
           </div>
         </div>
-        <div className="flex items-center absolute right-2 top-[100px]">
+        <div className="flex items-center absolute right-2 top-[45px] md:top-[100px]">
       {numbers.map((number)=>{
         return (
           <div className="flex items-center" key={number}>
