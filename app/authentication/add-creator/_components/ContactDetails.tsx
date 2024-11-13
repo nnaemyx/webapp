@@ -109,7 +109,7 @@ const {data, setData} = useEventCreatorContext()
             <div className='text-grey400 text-[12px]'>By continuing past this page, you acknowledge that you read, and agree to our <Link href='' className='underline text-grey700 '>Terms & Conditions for Eventcreators</Link> and our <Link href='' className='underline text-grey700'>Eventcreators Service Agreement</Link>.</div>
           </div>
         </div>
-      <div className="flex items-center absolute right-2 top-[100px]">
+      <div className="flex items-center absolute right-2 top-[45px] md:top-[100px]">
       {numbers.map((number)=>{
         return (
           <div className="flex items-center" key={number}>
