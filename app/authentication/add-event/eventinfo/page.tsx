@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Stylizedlogo from "/public/assests/stylized logo.png";
 import sideImage from "/public/assests/signup image.png"
-import { useRouter } from "next/navigation";
 import { FileInput, Label } from "flowbite-react";
 import Upload from "@/components/icons/Upload";
 
@@ -13,7 +12,6 @@ const numbers = [1,2]
 const options = ["Arts Exhibition", "Business", "Birthday", "Conferences", "Corporate/Company Events", "Music Concerts", "Sports & Fitness", "Expositions", "Festivals & Fairs", "Community", "Fashion", "Food & Drinks"," Nightlife & Entertainment", "Kids & Family", "Religious Events", "Birthday", "Games & Hobbies", "Anniversaries", "Holidays", "Hangouts"]
 
 function eventInfo() {
-const router = useRouter()
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -26,22 +24,18 @@ const router = useRouter()
   const [date, setdate] = useState("");
   const [time, settime] = useState("");
   const [socialMedia, setsocialMedia] = useState("");
-  const [website, setwebsite] = useState(false);
+  const [website, setwebsite] = useState("");
   
-
-  const nextpage = () =>{
-    router.push("/authentication/add-creator/banking")
-  }
    
    const details = [
     {type: "text", name: "Event name", placeholder: "GrooveFest Experience", value: eventName, edit: (value: string)=>{seteventName(value)}},
     {type: "text", name: "Description", placeholder: "Paint us a picture of your event in a few words!", value: description, edit: (value: string)=>{setdescription(value)}},
     {type: 'text', name: "Location", placeholder: "Where will the magic happen?", value: location, edit: (value: string)=>{setlocation(value)}},
-    {type: 'text', name: "Event Category", value: location, options, edit: (value: string)=>{setlocation(value)}},
+    {type: 'text', name: "Event Category", value: location, options, edit: (value: string)=>{seteventCategory(value)}},
     {type: 'text', name: "Date", placeholder: "DD/MM/YY", value: date, edit: (value: string)=>{setdate(value)}},
-    {type: "text", name: "Time", placeholder: "08:55 pm WAT", value: socialMedia, edit: (value: string)=>{setsocialMedia(value)}}, 
+    {type: "text", name: "Time", placeholder: "08:55 pm WAT", value: time, edit: (value: string)=>{settime(value)}}, 
     {type: 'text', name: "Social Media Page Link", placeholder: "Instagram.com/@tag", value: socialMedia, edit: (value: string)=>{setsocialMedia(value)}},
-    {type: 'text', name: "Website", placeholder: "www.myevent.com", value: eventCategory, edit: (value: string)=>{seteventCategory(value)}},
+    {type: 'text', name: "Website", placeholder: "www.myevent.com", value: website, edit: (value: string)=>{setwebsite(value)}},
     {type: "file", name: "Upload primary event flier & imagery",  sup: 'yeah',value: time, edit: (value: string)=>{settime(value)}},
     {type: "file", name: "Upload additional event fliers & imagery (up to 4 more)", sup: 'yeah',value: time, edit: (value: string)=>{settime(value)}},
 ]
@@ -78,10 +72,10 @@ const data = {
                    ></textarea>
                   }
                    {name === "Event Category" &&
-                    <select className="w-full border border-solid border-[#D0D5DD] h-[36px] mt-2 rounded-[6px] px-[12px] py-[8px]">
-                    {options?.map((option)=>{
+                    <select key={index} className="w-full border border-solid border-[#D0D5DD] h-[36px] mt-2 rounded-[6px] px-[12px] py-[8px]">
+                    {options?.map((option, i)=>{
                         return (
-                            <option value={option}>{option}</option>
+                            <option key={i} value={option}>{option}</option>
                         )
                     })}
                   </select>
@@ -121,19 +115,18 @@ const data = {
           <button
               type="submit"
               className="text-white bg-success400 w-[80%] py-[8px] px-[16px] rounded-[8px] font-sans font-medium"
-              onClick={nextpage}
             >
              <p>Submit</p>
             </button>
 
-            <div className='text-grey400'>By continuing past this page, you acknowledge that you read, and agree to our <Link href='' className='underline text-grey700 '>Terms & Conditions for Eventcreators</Link> and our <Link href='' className='underline text-grey700'>Eventcreators Service Agreement</Link>.</div>
+            <div className='text-grey400 text-[12px]'>By continuing past this page, you acknowledge that you read, and agree to our <Link href='' className='underline text-grey700 '>Terms & Conditions for Eventcreators</Link> and our <Link href='' className='underline text-grey700'>Eventcreators Service Agreement</Link>.</div>
           </div>
         </div>
       <div className="flex items-center absolute right-2 top-[100px]">
       {numbers.map((number)=>{
         return (
           <div className="flex items-center" key={number}>
-            <div onClick={nextpage} className={"flex w-[35px] h-[35px]  rounded-full justify-center items-center " + (number < 2 ? "bg-success400" : 'bg-grey400')}>
+            <div className={"flex w-[35px] h-[35px]  rounded-full justify-center items-center " + (number < 2 ? "bg-success400" : 'bg-grey400')}>
               {number}
             </div>
             {number < 2 && <div className="flex w-[40px] h-[2px] bg-grey400 "></div>}
