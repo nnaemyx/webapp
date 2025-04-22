@@ -43,7 +43,7 @@ const page = () => {
                     </p>
                 </div>
         </div>
-        <div className='grid grid-cols-2 gap-10 w-[85%] mx-auto py-8 '>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-10 w-[85%] mx-auto py-8 '>
             {ticketInfos.map(({id, name, price, description})=>{
                 return (
                 <div key={id} className='border border-solid border-grey400 rounded-xl border-collapse relative'>

@@ -5,8 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Stylizedlogo from "/public/assests/stylized logo.png";
 import sideImage from "/public/assests/signup image.png"
-import { FileInput, Label } from "flowbite-react";
-import Upload from "@/components/icons/Upload";
+import FileUpload from "@/components/ui/fileUpload";
 
 const numbers = [1,2]
 const options = ["Arts Exhibition", "Business", "Birthday", "Conferences", "Corporate/Company Events", "Music Concerts", "Sports & Fitness", "Expositions", "Festivals & Fairs", "Community", "Fashion", "Food & Drinks"," Nightlife & Entertainment", "Kids & Family", "Religious Events", "Birthday", "Games & Hobbies", "Anniversaries", "Holidays", "Hangouts"]
@@ -25,8 +24,10 @@ function eventInfo() {
   const [time, settime] = useState("");
   const [socialMedia, setsocialMedia] = useState("");
   const [website, setwebsite] = useState("");
+  const [primaryImage, setPrimaryImage] = useState<File[]>([]);
+  const [secondaryImage, setSecondaryImage] = useState<File[]>([]);
   
-   
+   console.log(primaryImage)
    const details = [
     {type: "text", name: "Event name", placeholder: "GrooveFest Experience", value: eventName, edit: (value: string)=>{seteventName(value)}},
     {type: "text", name: "Description", placeholder: "Paint us a picture of your event in a few words!", value: description, edit: (value: string)=>{setdescription(value)}},
@@ -36,8 +37,8 @@ function eventInfo() {
     {type: "text", name: "Time", placeholder: "08:55 pm WAT", value: time, edit: (value: string)=>{settime(value)}}, 
     {type: 'text', name: "Social Media Page Link", placeholder: "Instagram.com/@tag", value: socialMedia, edit: (value: string)=>{setsocialMedia(value)}},
     {type: 'text', name: "Website", placeholder: "www.myevent.com", value: website, edit: (value: string)=>{setwebsite(value)}},
-    {type: "file", name: "Upload primary event flier & imagery",  sup: 'yeah',value: time, edit: (value: string)=>{settime(value)}},
-    {type: "file", name: "Upload additional event fliers & imagery (up to 4 more)", sup: 'yeah',value: time, edit: (value: string)=>{settime(value)}},
+    {type: "file", name: "Upload primary event flier & imagery",  sup: 'yeah',value: primaryImage, edit: (newfile: File[])=>setPrimaryImage(newfile)},
+    {type: "file", name: "Upload additional event fliers & imagery (up to 4 more)", sup: 'yeah',value: secondaryImage, edit: (newfile: File[])=>setSecondaryImage(newfile)},
 ]
 const data = {
   eventName, description, location,eventCategory, date, time, socialMedia, 
@@ -91,21 +92,7 @@ const data = {
                   } 
                   {
                     sup && 
-                    <div className="flex w-full items-center justify-center">
-      <Label
-        htmlFor="dropzone-file"
-        className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-      >
-        <div className="flex flex-col items-center justify-center pb-6 pt-5">
-          <Upload/>
-          <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-            <span className="font-semibold">Drag & Drop or</span> <span className="text-secondary">choose</span>  file to upload
-          </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or any image files</p>
-        </div>
-        <FileInput id="dropzone-file" className="hidden" />
-      </Label>
-    </div>
+                   <FileUpload setFile={edit} files={value}/>
                   }
                 </div>
                 )
