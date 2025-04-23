@@ -1,9 +1,21 @@
+"use client"
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import Stylizedlogo from "/public/assests/stylized logo.png";
 import { MinusSquareIcon, PlusSquareIcon, Users2Icon, XIcon } from 'lucide-react';
+import Pagination from '@/components/ui/pagination';
 
 const page = () => {
+
+    type ticketType ={
+        id: number,
+        name: string,
+        avalibleTIckets: number,
+        description: string,
+        benefits: string
+    }
+
+    const [tickets, setTickets] = useState<ticketType[]>([])
     const ticketInfos = [
         {
             id: 1,
@@ -39,7 +51,7 @@ const page = () => {
         },
     ];
   return (
-    <div className="flex flex-col justify-center">
+    <div className="flex flex-col justify-center p-8">
         <div>
                 <Image src={Stylizedlogo} alt="logo" className="-ml-8" />
                 <div className='px-3'>
@@ -51,6 +63,7 @@ const page = () => {
                     </p>
                 </div>
         </div>
+        <Pagination numbers={[1,2]} i={3} position='flex items-center absolute right-[50%] top-[100px]'/>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-10 w-[85%] mx-auto py-8 '>
             {ticketInfos.map(({id, name, price, description})=>{
                 return (
