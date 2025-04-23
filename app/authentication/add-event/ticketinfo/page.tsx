@@ -29,12 +29,20 @@ const page = () => {
             description: 'This is the third ticket for the event.',
             benefits: 'Some even more cool benefits for this ticket.'
         },
+        {
+            id: 4,
+            name: 'Ticket 4',
+            availableTickets: 100,
+            price: 500,
+            description: 'This is the fourth ticket for the event.',
+            benefits: 'Some even more cool benefits for this ticket.'
+        },
     ];
   return (
-    <div className="flex flex-col p-10 justify-center ">
+    <div className="flex flex-col justify-center">
         <div>
                 <Image src={Stylizedlogo} alt="logo" className="-ml-8" />
-                <div>
+                <div className='px-3'>
                     <h1 className="text-[24px] font-semibold text-success400">
                     02 - Ticket information
                     </h1>
@@ -78,8 +86,8 @@ const page = () => {
                         </div>
                     </div>
                     <div className='flex font-semibold p-4 justify-between border border-solid  border-grey400 rounded-b-xl'>
-                        <button className='py-3 px-20 border border-solid  border-grey400 rounded-md'>Cancel</button>
-                        <button className='py-3 px-20 border border-solid  border-grey400 rounded-md bg-success300 text-white'>Create</button>
+                        <button className='py-3 px-10 md:px-20 border border-solid  border-grey400 rounded-md'>Cancel</button>
+                        <button className='py-3 px-10 md:px-20  border border-solid  border-grey400 rounded-md bg-success300 text-white'>Create</button>
                     </div>
                     <XIcon className='absolute top-5 right-6 text-grey700'/>
                 </div>
