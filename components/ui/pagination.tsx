@@ -3,7 +3,7 @@ import React from 'react'
 
 const Pagination = ({numbers, i, position}: {numbers: number[], i: number, position: string}) => {
   return (
-    <div className={`${position}`}>
+    <div className={`${position} right-[15%]`}>
     {numbers.map((number, index)=>{
       return (
         <div className="flex items-center" key={number}>

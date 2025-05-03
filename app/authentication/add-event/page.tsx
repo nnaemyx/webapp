@@ -31,7 +31,7 @@ const data = {email, password}
 const submit = async() =>{
   setLoading(true)
     await callApi<{message: string, accessToken:string} >( process.env.NEXT_PUBLIC_NEXT_ENV === "development" ? 'http://localhost:5000/api/creator/login' : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/creator/login`,
-          {method: "POST", body:data,
+          {method: "POST", body:data, credentials: "include",
             onResponse: ({data})=>{
              toast({
                description: data.message
