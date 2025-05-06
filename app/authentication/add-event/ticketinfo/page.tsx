@@ -66,7 +66,6 @@ const page = () => {
 
     const addTicketToArray = (id: number) =>{
         setCreatedTicket((prev)=> [...createdTicket, id])
-        console.log(createdTicket)
     }
     const checkIfSubmittedTicket = () =>{
         const ticketValuesFilled = tickets.map(({Ticket_name, Price, Features, Quantity}) => {

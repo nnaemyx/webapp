@@ -8,7 +8,7 @@ import sideImage from "/public/assests/signup image.png"
 import FileUpload from "@/components/ui/fileUpload";
 import Pagination from "@/components/ui/pagination";
 import { useRouter } from "next/navigation";
-import { useEventContext } from "../_components/context";
+import { eventDataType, useEventContext } from "../_components/context";
 import { toast } from "@/components/ui/use-toast";
 
 const numbers = [1,2]
@@ -18,6 +18,18 @@ function eventInfo() {
 
   useEffect(() => {
     window.scrollTo(0, 0)
+    if(localStorage.getItem("eventData")){
+      const storedData = localStorage.getItem("eventData");
+      const eventDataAlreadyPopulated: eventDataType = storedData ? JSON.parse(storedData) : null;
+      setDescription(eventDataAlreadyPopulated.Description ? eventDataAlreadyPopulated.Description : "")
+      setEvent_Category(eventDataAlreadyPopulated.Event_category ? eventDataAlreadyPopulated.Event_category : "")
+      setEvent_name(eventDataAlreadyPopulated.Event_name ? eventDataAlreadyPopulated.Event_name : "")
+      setTime(eventDataAlreadyPopulated.Time ? eventDataAlreadyPopulated.Time : "")
+      setDate(eventDataAlreadyPopulated.Date ? eventDataAlreadyPopulated.Date : "")
+      setSocials(eventDataAlreadyPopulated.Socials ? eventDataAlreadyPopulated.Socials : "")
+      setlocation(eventDataAlreadyPopulated.Address ? eventDataAlreadyPopulated.Address : "")
+      setwebsite(eventDataAlreadyPopulated.Website ? eventDataAlreadyPopulated.Website : '')
+    }
   }, [])
   
   const router = useRouter()
@@ -25,7 +37,7 @@ function eventInfo() {
   const [Description, setDescription] = useState<string>("");
   const [location, setlocation] = useState("");
   const [Event_Category, setEvent_Category] = useState(options[0]);
-  const [date, setdate] = useState("");
+  const [date, setDate] = useState("");
   const [Time, setTime] = useState("");
   const [Socials, setSocials] = useState("");
   const [website, setwebsite] = useState("");
@@ -37,7 +49,7 @@ function eventInfo() {
     {type: "text", name: "Description", placeholder: "Paint us a picture of your event in a few words!", value: Description, edit: (value: string)=>{setDescription(value)}},
     {type: 'text', name: "Location", placeholder: "Where will the magic happen?", value: location, edit: (value: string)=>{setlocation(value)}},
     {type: 'text', name: "Event Category", value: location, options, edit: (value: string)=>{setEvent_Category(value)}},
-    {type: 'text', name: "Date", placeholder: "DD/MM/YY", value: date, edit: (value: string)=>{setdate(value)}},
+    {type: 'text', name: "Date", placeholder: "DD/MM/YY", value: date, edit: (value: string)=>{setDate(value)}},
     {type: "text", name: "Time", placeholder: "08:55 pm WAT", value: Time, edit: (value: string)=>{setTime(value)}}, 
     {type: 'text', name: "Social Media Page Link", placeholder: "Instagram.com/@tag", value: Socials, edit: (value: string)=>{setSocials(value)}},
     {type: 'text', name: "Website", placeholder: "www.myevent.com", value: website, edit: (value: string)=>{setwebsite(value)}},
@@ -49,14 +61,16 @@ function eventInfo() {
 const {data,setData} = useEventContext()
 
 const handleSubmit =()=>{
-  if(Event_name && Event_Category  && Description && location && date && Socials && website &&  Primary_flier && Secondary_fliers  ){
-    setData({...data, Event_name, Event_category: Event_Category , Description, Address: location, Date: date, Socials, Website:website,  Primary_flier, Secondary_fliers  })
+  if(Event_name && Event_Category  && Description && location && date && Socials && website &&  Primary_flier.length > 0 && Secondary_fliers.length > 0  ){
+    setData({...data, Event_name, Event_category: Event_Category , Description, Address: location, Date: date, Time, Socials, Website:website,  Primary_flier, Secondary_fliers})
+    localStorage.setItem("eventData", JSON.stringify({Event_name, Event_category: Event_Category , Description, Address: location, Time, Date: date, Socials, Website:website}))
     router.push("/authentication/add-event/ticketinfo")
   }
   else{
     toast({variant: "destructive",description: "Please fill all fields",});    
   }
 }
+
   return (
     <div >
     <div className="flex justify-center p-4 font-inter">
@@ -115,7 +129,7 @@ const handleSubmit =()=>{
               })}
               {imageDetails.map(({edit, value, name})=>{
                 return(
-                  <div>
+                  <div key={name}>
                     <label className="text-[14px]">{name}</label>
                     <FileUpload key={name} setFile={edit} files={value}/>
                   </div>
